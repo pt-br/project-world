@@ -16,7 +16,6 @@ $(function() {
   /// DOM FUNCTIONS END ///
     
 
-
   /// OBJECTS BEGIN ///
 
   function Bot($botName) {
@@ -47,13 +46,14 @@ $(function() {
     $$world = new World("Project01");
     $$world.setDayTime();
     $$botHonki = new Bot("Honki");
+    $$botHonki = new Bot("Anna");
     console.log("[ World Info ] TimeThink of Honki on his creation: " + $$botHonki.getThinkTime());
+    console.log("[ World Info ] TimeThink of Anna on his creation: " + $$botHonki.getThinkTime());
     timeInfo();
   }
   
   // World Functions //
   World.prototype.setBotThinkTime = function($$botObject) {
-    console.log($$botObject.name);
     var $newThinkTime = Math.floor((Math.random() * 5000) + 2000);
     $$botObject.thinkTime = $newThinkTime;
   }
@@ -70,12 +70,12 @@ $(function() {
     var $date = new Date();
     var $hour = $date.getHours();
     $hour < 10 ? this.hour = "0" + $hour : this.hour = $hour;
-    if($hour > 19 && $hour < 5) {
+    if($hour > 19 || $hour < 5) {
+      this.dayTime = "night";
+      jQuery("body").addClass("timeNight");  
+    } else {
       this.dayTime = "day";
       jQuery("body").addClass("timeDay");
-    } else {
-        this.dayTime = "night";
-        jQuery("body").addClass("timeNight");
     }
   }
 
