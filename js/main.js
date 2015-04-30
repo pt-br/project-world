@@ -46,7 +46,7 @@ $(function() {
     $$world = new World("Project01");
     $$world.setDayTime();
     $$botHonki = new Bot("Honki");
-    $$botHonki = new Bot("Anna");
+    $$botAnna = new Bot("Anna");
     console.log("[ World Info ] TimeThink of Honki on his creation: " + $$botHonki.getThinkTime());
     console.log("[ World Info ] TimeThink of Anna on his creation: " + $$botHonki.getThinkTime());
     timeInfo();
