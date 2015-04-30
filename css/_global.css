@@ -26,3 +26,11 @@ body {
   top: -14px;
   left: -10px;
 }
+
+#Anna {
+  background: rgb(229, 66, 147);
+}
+
+#Anna:after {
+  color: rgb(229, 66, 147);
+}

@@ -116,7 +116,7 @@ $(function() {
 
   Bot.prototype.think = function() {
     var $bot = this;
-    console.log("[ " + $bot.getName() + " ] I'm thinking!");
+    console.log("[ " + $bot.getName() + " ] Hm... I'm thinking...");
     var $newDesire = Math.floor((Math.random() * 2) + 1);
     switch($newDesire) {
       case 1: 
