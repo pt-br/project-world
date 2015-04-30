@@ -1,0 +1,28 @@
+body {
+  
+}
+
+.timeDay {
+  background: rgb(101, 255, 213);
+}
+
+.timeNight {
+  background: rgb(50, 100, 103);
+}
+
+.bot {
+  width: 10px;
+  height: 10px;
+  background: black;
+  display: block;
+  position: relative;
+  border-radius: 8px;
+}
+
+.bot:after {
+  content: attr(id);
+  font-size: 12px;
+  position: absolute;
+  top: -14px;
+  left: -10px;
+}
