@@ -29,6 +29,7 @@ body {
 
 #Anna {
   background: rgb(229, 66, 147);
+  top: 40px;
 }
 
 #Anna:after {
