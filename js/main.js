@@ -255,7 +255,8 @@ $(function() {
           }, $nextPhraseTime);
         } 
         else if ($relationShip == "enemy") {
-          console.warn("[ THINKING ] " + $this.getName() + " thinks: I don't wanna talk to you " + $talkingPartner.getName() + "!");
+          console.error("[ THINKING ] " + $this.getName() + " thinks: I don't wanna talk to " + $talkingPartner.getName() + "!");
+          $this.busy = false;
         }
       } else {
         // Partner busy, can't talk now
