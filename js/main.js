@@ -32,7 +32,7 @@ $(function() {
     $botList.push($this);
     $$world.setBotThinkTime($this);
 
-    console.log("[ World Info ] TimeThink of " + $this.name + " on his creation: " + $this.getThinkTime());
+    console.warn("[ World Info ] TimeThink of " + $this.name + " on his creation: " + $this.getThinkTime());
 
     setInterval(function() {
       $this.think();
@@ -50,7 +50,7 @@ $(function() {
   /// LIFE FUNCTIONS BEGIN ///
 
   function initializeMatrix() {
-    console.log("[Initializing Life...]");
+    console.warn("[Initializing Life...]");
 
     $$world = new World("Project01");
     $$world.setDayTime();
@@ -58,9 +58,17 @@ $(function() {
     //loadWords("lib/test.txt");
 
     $botList = [];
-    $$botHonki = new Bot("Honki");
+    // $$botHonki = new Bot("Honki");
     $$botAnna = new Bot("Anna");
-    $$botBob = new Bot("Bob");
+    // $$botBob = new Bot("Bob");
+    // $$botJohn = new Bot("John");
+    // $$botRobert = new Bot("Robert");
+    // $$botNutt = new Bot("Nutt");
+    // $$botHue = new Bot("Hue");
+    // $$botPot = new Bot("Pot");
+    $$botAndrigo = new Bot("Andrigo");
+    $$botLucas = new Bot("Lucas");
+
     timeInfo();
   }
   
@@ -305,7 +313,7 @@ $(function() {
     var $time = $$world.getDayTime();
     var $suffix;
     $time == "day" ? $suffix = "am" : $suffix = "pm";    
-    console.log("[ World Info ] The time now is " + $hour + " " + $suffix);
+    console.warn("[ World Info ] The time now is " + $hour + " " + $suffix);
   }
 
   function loadWords(file) {
