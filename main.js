@@ -430,17 +430,19 @@ function checkProximity() {
           $botList[$currentIndex].nextTo.push($botList[i2]);
 
           var $relationShip = checkRelationship($botList[$currentIndex], $botList[i2]);
-          if($relationShip == "none") {
-            console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
-            io.emit("think", $botList[$currentIndex].getName(), "I don't know you, " + $botList[i2].getName());
-          }
-          else if($relationShip == "friend") {
-            console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
-            io.emit("think", $botList[$currentIndex].getName(), "Hey " + $botList[i2].getName() + ", my friend!");
-          }
-          else if($relationShip == "enemy") {
-            console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
-            io.emit("think", $botList[$currentIndex].getName(), "I HATE YOU " + $botList[i2].getName() + "!");
+          if(!$botList[$currentIndex].busy) {
+            if($relationShip == "none") {
+              console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
+              io.emit("think", $botList[$currentIndex].getName(), "I don't know you, " + $botList[i2].getName());
+            }
+            else if($relationShip == "friend") {
+              console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
+              io.emit("think", $botList[$currentIndex].getName(), "Hey " + $botList[i2].getName() + ", my friend!");
+            }
+            else if($relationShip == "enemy") {
+              console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
+              io.emit("think", $botList[$currentIndex].getName(), "I HATE YOU " + $botList[i2].getName() + "!");
+            }
           }
         }         
 
