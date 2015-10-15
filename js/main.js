@@ -33,10 +33,12 @@ $(function() {
     for(var i = 0; i <= $maxBotIndex; i++) {
       var $currentIndex = i;
       var $currentBotName = $botList[i].name;
+      var $currentBotGender = $botList[i].gender;
       var $currentBotTop = $botList[i].top;
       var $currentBotLeft = $botList[i].left;
       jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
       jQuery("#"+$currentBotName).css({ top: $currentBotTop, left: $currentBotLeft });
+      jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
     }
   }
 

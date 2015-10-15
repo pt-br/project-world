@@ -54,9 +54,10 @@ function loadWords() {
   });
 }
 
-function Bot($botName) {
+function Bot($botName, $gender) {
   var $this = this;
   $this.name = $botName;
+  $this.gender = $gender;
   $this.thinkTime;
   $this.busy = false;
   $this.enjoyingConversation = 0;
@@ -431,8 +432,8 @@ function initializeMatrix() {
   loadWords();
 
   $botList = [];
-  $$botHonki = new Bot("Honki");
-  $$botAnna = new Bot("Anna");
+  $$botHonki = new Bot("Honki", "male");
+  $$botAnna = new Bot("Anna", "female");
   // $$botBob = new Bot("Bob");
 
   timeInfo();

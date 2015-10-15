@@ -27,11 +27,11 @@ body {
   left: -10px;
 }
 
-#Anna {
+.bot[bot-gender=female] {
   background: rgb(229, 66, 147);
   top: 40px;
 }
 
-#Anna:after {
+.bot[bot-gender=female]:after {
   color: rgb(229, 66, 147);
 }
