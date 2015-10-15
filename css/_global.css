@@ -11,12 +11,13 @@ body {
 }
 
 .bot {
-  width: 10px;
-  height: 10px;
+  width: 50px;
+  height: 50px;
   background: #448AD8;
+  background-size: contain !important;
   display: block;
   position: relative;
-  border-radius: 8px;
+  border-radius: 30px;
 }
 
 .bot:after {

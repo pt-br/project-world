@@ -58,10 +58,12 @@ $(function() {
         var $currentIndex = i;
         var $currentBotName = $botList[i].name;
         var $currentBotGender = $botList[i].gender;
+        var $currentBotFace = $botList[i].face;
         var $currentBotTop = $botList[i].top;
         var $currentBotLeft = $botList[i].left;
         jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
-        jQuery("#"+$currentBotName).css({ top: $currentBotTop, left: $currentBotLeft });
+        jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
+        jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
         jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
         jQuery("#"+$currentBotName).append("<div class='think'></div>");
         jQuery("#"+$currentBotName).append("<div class='talk'></div>");

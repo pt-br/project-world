@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var fs = require('fs');
+var request = require('request');
 var cheerio = require('cheerio');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -64,9 +65,18 @@ function Bot($botName, $gender) {
   $this.enjoyingConversation = 0;
   $this.top = 0;
   $this.left = 0;
+  $this.face = "";
   $this.friends = [];
   $this.enemies = [];
   $this.nextTo = [];
+
+  request('http://api.randomuser.me/?gender='+$gender, function (error, response, data) {
+  if (!error && response.statusCode == 200) {
+      jsonObject = JSON.parse(data);
+      $this.face = jsonObject.results[0].user.picture.thumbnail;
+    }
+  });
+
 
   $botList.push($this);
   $$world.setBotThinkTime($this);
@@ -472,7 +482,7 @@ function initializeMatrix() {
   $botList = [];
   $$botHonki = new Bot("Honki", "male");
   $$botAnna = new Bot("Anna", "female");
-  $$botBob = new Bot("Bob");
+  $$botBob = new Bot("Bob", "male");
 
   timeInfo();
 }
