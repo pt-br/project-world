@@ -247,7 +247,7 @@ Bot.prototype.talk = function() {
                 $this.enemies.push($talkingPartner);
                 $talkingPartner.enemies.push($this);
                 console.error("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
-                io.emit("talk", $this.getName(), "says to " + $talkingPartner.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
+                io.emit("final_talk", $this.getName(), "says to " + $talkingPartner.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
               }
               else if($relationShip == "friend") {
                 $this.enemies.push($talkingPartner);
@@ -293,8 +293,10 @@ Bot.prototype.talk = function() {
             $talkingPartner.enjoyingConversation = 0;
 
             // Clean talk box
-            io.emit("end_talk", $this.getName(), $talkingPartner.getName());
-
+            setTimeout(function() {
+              io.emit("end_talk", $this.getName(), $talkingPartner.getName());
+            }, 6000);
+            
           }
         }, $nextPhraseTime);
       } 
@@ -467,7 +469,7 @@ function initializeMatrix() {
   $botList = [];
   $$botHonki = new Bot("Honki", "male");
   $$botAnna = new Bot("Anna", "female");
-  // $$botBob = new Bot("Bob");
+  $$botBob = new Bot("Bob");
 
   timeInfo();
 }
