@@ -1,5 +1,10 @@
+@font-face {
+    font-family: helvetica;
+    src: url(../fonts/Helvetica.otf);
+}
+
 body {
-  
+  font-family: helvetica;
 }
 
 .timeDay {
@@ -22,10 +27,11 @@ body {
 
 .bot:after {
   content: attr(id);
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: bold;
   color: #448AD8;
   position: absolute;
-  top: -14px;
+  top: -16px;
   left: -10px;
 }
 
