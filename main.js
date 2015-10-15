@@ -51,6 +51,7 @@ function loadWords() {
     if(err) throw err;
     var $allText = data.toString();
     $$wordList = $allText.split(/\n/);
+    console.log($$wordList);
   });
 }
 
@@ -392,7 +393,7 @@ function checkProximity() {
           var $proximityValue = $otherPosition - $currentPosition;
         }
 
-        if($proximityValue <= 100) {
+        if($proximityValue <= 10000) {
           // The current element is next to this element
           console.log("[INFO] "+ $botList[$currentIndex].getName() + " is next to " + $botList[i2].getName());
           $botList[$currentIndex].nextTo.push($botList[i2]);
