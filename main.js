@@ -431,7 +431,7 @@ function checkProximity() {
           $botList[$currentIndex].nextTo.push($botList[i2]);
 
           var $relationShip = checkRelationship($botList[$currentIndex], $botList[i2]);
-          if(!$botList[$currentIndex].busy) {
+          if(!$botList[$currentIndex].busy | !$botList[i2].getName()) {
             if($relationShip == "none") {
               console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
               io.emit("think", $botList[$currentIndex].getName(), "I don't know you, " + $botList[i2].getName());
