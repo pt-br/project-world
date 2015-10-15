@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
     fs.readFile(__dirname + '/index.html', function(err, data) {               
         var $ = cheerio.load(data);
 
-        $("body").addClass("timeNight");
+        //$("body").addClass("timeNight");
 
         res.send($.html());
     });
@@ -23,7 +23,7 @@ io.on('connection', function(socket) {
   console.log("User connected");
 
   console.log("Load world - New socket connected");
-  socket.emit("load_world", $botList);
+  socket.emit("load_world", $botList, $$world.dayTimeClass);
   
   socket.on('walk', function(top, left) {
     console.log("top: " + top);
@@ -81,6 +81,7 @@ function Bot($botName, $gender) {
 function World($worldName) {
   this.name = $worldName;
   this.dayTime;
+  this.dayTimeClass;
   this.hour;
 }
 
@@ -90,10 +91,10 @@ World.prototype.setDayTime = function() {
   $hour < 10 ? this.hour = "0" + $hour : this.hour = $hour;
   if($hour > 19 || $hour < 5) {
     this.dayTime = "night";
-    //jQuery("body").addClass("timeNight");  
+    this.dayTimeClass =  "timeNight";
   } else {
     this.dayTime = "day";
-    //jQuery("body").addClass("timeDay");
+    this.dayTimeClass =  "timeDay";
   }
 }
 

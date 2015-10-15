@@ -12,8 +12,11 @@ $(function() {
     .on("ready", function() {
       socket = io();
 
-      socket.on("load_world", function(botList) {
+      socket.on("load_world", function(botList, time) {
         destroyAllBots();
+
+        jQuery("body").addClass(time);
+
         var $botList = botList;
         drawCurrentBots($botList)
       });
@@ -41,6 +44,10 @@ $(function() {
     });
 
   /// DOM FUNCTIONS END ///
+
+  function setDayTime(time) {
+    jQuery("body").addClass("time");  
+  }
   
   function drawCurrentBots($botList) {
     setTimeout(function() {
