@@ -19,6 +19,33 @@ app.get('/', function (req, res) {
     });
  });
 
+io.on('connection', function(socket) {
+  console.log("User connected");
+
+  console.log("Load world - New socket connected");
+  socket.emit("load_world", $botList);
+  
+  socket.on('walk', function(top, left) {
+    console.log("top: " + top);
+    console.log("left: " + left);
+  });
+
+  socket.on('end_walk', function() {
+    checkProximity();
+  });
+
+  socket.on('disconnect', function() {
+    console.log("User disconnected");
+  });
+
+});
+
+var port = 8080;
+
+http.listen(port, function() {
+  console.log("Runing server on port: " + port);
+});
+
 function loadWords() {
   fs.readFile('lib/words.txt', function(err, data) {
     if(err) throw err;
@@ -412,31 +439,3 @@ function initializeMatrix() {
 }
 
 initializeMatrix();
-
-
-io.on('connection', function(socket) {
-  console.log("User connected");
-
-  console.log("Load world - New socket connected");
-  socket.emit("load_world", $botList);
-  
-  socket.on('walk', function(top, left) {
-    console.log("top: " + top);
-    console.log("left: " + left);
-  });
-
-  socket.on('end_walk', function() {
-    checkProximity();
-  });
-
-  socket.on('disconnect', function() {
-    console.log("User disconnected");
-  });
-
-});
-
-var port = 8080;
-
-http.listen(port, function() {
-  console.log("Runing server on port: " + port);
-});

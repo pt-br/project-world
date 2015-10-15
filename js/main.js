@@ -15,7 +15,7 @@ $(function() {
       socket.on("load_world", function(botList) {
         destroyAllBots();
         var $botList = botList;
-        drawInitialBots($botList)
+        drawCurrentBots($botList)
       });
 
       socket.on("walk", function(top, left, botName) {
@@ -26,8 +26,8 @@ $(function() {
 
   /// DOM FUNCTIONS END ///
   
-  function drawInitialBots($botList) {
-    console.log("DRAW BOTS");
+  function drawCurrentBots($botList) {
+    console.log("Drawning current bots");
     $totalBots = $botList.length;
     $maxBotIndex = $totalBots -1;
     for(var i = 0; i <= $maxBotIndex; i++) {
