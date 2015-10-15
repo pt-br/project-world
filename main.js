@@ -51,7 +51,7 @@ function loadWords() {
     if(err) throw err;
     var $allText = data.toString();
     $$wordList = $allText.split(/\n/);
-    console.log($$wordList);
+    //console.log($$wordList);
   });
 }
 
@@ -123,10 +123,12 @@ Bot.prototype.getThinkTime = function() {
 }
 Bot.prototype.doNothing = function() {
   console.log("[ " + this.getName() + " ] I'm bored. I don't wanna do nothing now...");
+  io.emit("think", this.getName(), "I'm bored. I don't wanna do nothing now...");
 }
 Bot.prototype.walk = function() {
   var $this = this;
   console.log("[ " + $this.getName() + " ] I'd like to take a walk!");
+  io.emit("think", $this.getName(), "I'd like to take a walk!");
 
   cleanProximity($this);
 
@@ -150,6 +152,7 @@ Bot.prototype.walk = function() {
 Bot.prototype.talk = function() {
   var $this = this;
   console.log("[ THINKING ] " + $this.getName() + " thinks: I wanna talk a little, but with who?");
+  io.emit("think", $this.getName(), "I wanna talk a little, but with who?");
   var $nextTotal = $this.nextTo.length;
   var $nextMax = $nextTotal -1;
 
@@ -165,7 +168,7 @@ Bot.prototype.talk = function() {
         // Partnet is not an enemy, start a chat
         $talkingPartner.busy = true;
         console.log("[ " + $this.getName() + " ] Aha! I'll talk to " + $talkingPartner.getName());
-        
+        io.emit("think", $this.getName(), "Aha! I'll talk to " + $talkingPartner.getName());
         var $nextPhraseTime = Math.floor((Math.random() * 5000) + 2000);
         var $talkingNow = 1;
         var $chatInterval = setInterval(function() {
@@ -174,32 +177,44 @@ Bot.prototype.talk = function() {
             var $toSay = say();
             
             if($talkingNow == 1) {
+
+              // Clean the last phrase
+              io.emit("clear_last_phrase", $talkingPartner.getName());
+
               console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": " + $toSay);
-              
+              io.emit("talk", $this.getName(), "says to " + $talkingPartner.getName() + ": " + $toSay);
               var $like = Math.floor(Math.random() * 2);
               if($like == 0) {
                 // Didn't like 
                 console.warn("[ THINKING ] " + $talkingPartner.getName() + " thinks: Hmm... I didn't like this...");
+                io.emit("think", $talkingPartner.getName(), "Hmm... I didn't like this...");
                 $talkingPartner.enjoyingConversation--;
               } else {
                 // Like
                 console.log("[ THINKING ] " + $talkingPartner.getName() + " thinks: Wow! Interesting");
+                io.emit("think", $this.getName(), "Wow! Interesting");
                 $talkingPartner.enjoyingConversation++;
               }
 
               $talkingNow = 2;
 
             } else {
+
+              // Clean the last phrase
+              io.emit("clear_last_phrase", $this.getName());
+
               console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": " + $toSay);
-              
+              io.emit("talk", $talkingPartner.getName(), "says to " + $this.getName() + ": " + $toSay);
               var $like = Math.floor(Math.random() * 2);
               if($like == 0) {
                 // Didn't like 
                 console.warn("[ THINKING ] " + $this.getName() + " thinks: Hmm... I didn't like this...");
+                io.emit("think", $this.getName(), "Hmm... I didn't like this...");
                 $this.enjoyingConversation--;
               } else {
                 // Like
                 console.log("[ THINKING ] " + $this.getName() + " thinks: Wow! Interesting");
+                io.emit("think", $this.getName(), "Wow! Interesting");
                 $this.enjoyingConversation++;
               }
 
@@ -219,9 +234,11 @@ Bot.prototype.talk = function() {
                 $this.friends.push($talkingPartner);
                 $talkingPartner.friends.push($this);
                 console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
+                io.emit("talk", $this.getName(), "says to " + $talkingPartner.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
               }
               else if($relationShip == "friend") {
                 console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": It's always good to talk with you, my friend! Goodbye");
+                io.emit("talk", $this.getName(), "says to " + $talkingPartner.getName() + ": It's always good to talk with you, my friend! Goodbye");
               }
             }
             else if($this.enjoyingConversation == -3) {
@@ -230,6 +247,7 @@ Bot.prototype.talk = function() {
                 $this.enemies.push($talkingPartner);
                 $talkingPartner.enemies.push($this);
                 console.error("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
+                io.emit("talk", $this.getName(), "says to " + $talkingPartner.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
               }
               else if($relationShip == "friend") {
                 $this.enemies.push($talkingPartner);
@@ -237,6 +255,7 @@ Bot.prototype.talk = function() {
                 $talkingPartner.enemies.push($this);
                 removeFriend($talkingPartner, $this);
                 console.error("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": I used to be your friend, but after this conversation... NO MORE!");
+                io.emit("talk", $this.getName(), "says to " + $talkingPartner.getName() + ": I used to be your friend, but after this conversation... NO MORE!");
               }
             }
             else if($talkingPartner.enjoyingConversation == 3) {
@@ -245,9 +264,11 @@ Bot.prototype.talk = function() {
                 $talkingPartner.friends.push($this);
                 $this.friends.push($talkingPartner);
                 console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
+                io.emit("talk", $talkingPartner.getName(), "says to " + $this.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
               }
               else if($relationShip == "friend") {
                 console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": It's always good to talk with you, my friend! Goodbye");
+                io.emit("talk", $talkingPartner.getName(), "says to " + $this.getName() + ": It's always good to talk with you, my friend! Goodbye");
               }
             }
             else if($talkingPartner.enjoyingConversation == -3) {
@@ -256,6 +277,7 @@ Bot.prototype.talk = function() {
                 $talkingPartner.enemies.push($this);
                 $this.enemies.push($talkingPartner);
                 console.error("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
+                io.emit("talk", $talkingPartner.getName(), "says to " + $this.getName() + ": You are a bullshit! Don't be crazy to get in my way again!");
               }
               else if($relationShip == "friend") {
                 $talkingPartner.enemies.push($this);
@@ -263,28 +285,35 @@ Bot.prototype.talk = function() {
                 $this.enemies.push($talkingPartner);
                 removeFriend($this, $talkingPartner);
                 console.error("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": I used to be your friend, but after this conversation... NO MORE!");
+                io.emit("talk", $talkingPartner.getName(), "says to " + $this.getName() + ": I used to be your friend, but after this conversation... NO MORE!");
               }
             }
             // Clean the enjoyingConversation value
             $this.enjoyingConversation = 0;
             $talkingPartner.enjoyingConversation = 0;
 
+            // Clean talk box
+            io.emit("end_talk", $this.getName(), $talkingPartner.getName());
+
           }
         }, $nextPhraseTime);
       } 
       else if ($relationShip == "enemy") {
         console.error("[ THINKING ] " + $this.getName() + " thinks: I don't wanna talk to " + $talkingPartner.getName() + "!");
+        io.emit("think", $this.getName(), "I don't wanna talk to " + $talkingPartner.getName() + "!");
         $this.busy = false;
       }
     } else {
       // Partner busy, can't talk now
       console.log("[ THINKING ] " + $this.getName() + " thinks: Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
+      io.emit("think", $this.getName(), "Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
       $this.busy = false;
     }
 
   } else {
     // Nobody near
     console.log("[ THINKING ] " + $this.getName() + " thinks: There is nobody near me to talk :/");
+    io.emit("think", $this.getName(), "There is nobody near me to talk :/");
     $this.busy = false;
   }
 }
@@ -393,7 +422,7 @@ function checkProximity() {
           var $proximityValue = $otherPosition - $currentPosition;
         }
 
-        if($proximityValue <= 10000) {
+        if($proximityValue <= 100) {
           // The current element is next to this element
           console.log("[INFO] "+ $botList[$currentIndex].getName() + " is next to " + $botList[i2].getName());
           $botList[$currentIndex].nextTo.push($botList[i2]);
@@ -401,12 +430,15 @@ function checkProximity() {
           var $relationShip = checkRelationship($botList[$currentIndex], $botList[i2]);
           if($relationShip == "none") {
             console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
+            io.emit("think", $botList[$currentIndex].getName(), "I don't know you, " + $botList[i2].getName());
           }
           else if($relationShip == "friend") {
             console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
+            io.emit("think", $botList[$currentIndex].getName(), "Hey " + $botList[i2].getName() + ", my friend!");
           }
           else if($relationShip == "enemy") {
             console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
+            io.emit("think", $botList[$currentIndex].getName(), "I HATE YOU " + $botList[i2].getName() + "!");
           }
         }         
 

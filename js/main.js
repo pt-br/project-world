@@ -22,24 +22,44 @@ $(function() {
         drawMovement(top, left, botName);
       });
 
+      socket.on("think", function(botName, thinkMessage) {
+        drawThink(botName, thinkMessage);
+      });
+
+      socket.on("talk", function(botName, talkMessage) {
+        drawTalk(botName, talkMessage);
+      });
+
+      socket.on("clear_last_phrase", function(botName) {
+        clearLastPhrase(botName);
+      });
+
+      socket.on("end_talk", function(botName, botPartnerName) {
+        clearTalk(botName, botPartnerName);
+      });
+
     });
 
   /// DOM FUNCTIONS END ///
   
   function drawCurrentBots($botList) {
-    console.log("Drawning current bots");
-    $totalBots = $botList.length;
-    $maxBotIndex = $totalBots -1;
-    for(var i = 0; i <= $maxBotIndex; i++) {
-      var $currentIndex = i;
-      var $currentBotName = $botList[i].name;
-      var $currentBotGender = $botList[i].gender;
-      var $currentBotTop = $botList[i].top;
-      var $currentBotLeft = $botList[i].left;
-      jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
-      jQuery("#"+$currentBotName).css({ top: $currentBotTop, left: $currentBotLeft });
-      jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
-    }
+    setTimeout(function() {
+      console.log("Drawning current bots");
+      $totalBots = $botList.length;
+      $maxBotIndex = $totalBots -1;
+      for(var i = 0; i <= $maxBotIndex; i++) {
+        var $currentIndex = i;
+        var $currentBotName = $botList[i].name;
+        var $currentBotGender = $botList[i].gender;
+        var $currentBotTop = $botList[i].top;
+        var $currentBotLeft = $botList[i].left;
+        jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
+        jQuery("#"+$currentBotName).css({ top: $currentBotTop, left: $currentBotLeft });
+        jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
+        jQuery("#"+$currentBotName).append("<div class='think'></div>");
+        jQuery("#"+$currentBotName).append("<div class='talk'></div>");
+      }
+    }, 300);
   }
 
   function drawMovement(top, left, botName) {
@@ -53,6 +73,23 @@ $(function() {
         socket.emit("end_walk");
       }
     });
+  }
+
+  function drawThink(botName, thinkMessage) {
+    jQuery("#"+botName).find(".think").text("[Thinking] " + thinkMessage);
+  }
+
+  function drawTalk(botName, talkMessage) {
+    jQuery("#"+botName).find(".talk").text(talkMessage);
+  }
+
+  function clearLastPhrase(botName) {
+    jQuery("#"+botName).find(".talk").text("");
+  }
+
+  function clearTalk(botName, botPartnerName) {
+    jQuery("#"+botName).find(".talk").text("");
+    jQuery("#"+botPartnerName).find(".talk").text("");
   }
 
   function destroyAllBots() {
