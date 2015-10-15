@@ -85,20 +85,25 @@ $(function() {
   }
 
   function drawThink(botName, thinkMessage) {
+    jQuery("#"+botName).find(".think").css("display", "block");
     jQuery("#"+botName).find(".think").text("[Thinking] " + thinkMessage);
   }
 
   function drawTalk(botName, talkMessage) {
+    jQuery("#"+botName).find(".talk").css("display", "block");
     jQuery("#"+botName).find(".talk").text(talkMessage);
   }
 
   function clearLastPhrase(botName) {
     jQuery("#"+botName).find(".talk").text("");
+    jQuery("#"+botName).find(".talk").css("display", "none");
   }
 
   function clearTalk(botName, botPartnerName) {
     jQuery("#"+botName).find(".talk").text("");
+    jQuery("#"+botName).find(".talk").css("display", "none");
     jQuery("#"+botPartnerName).find(".talk").text("");
+    jQuery("#"+botPartnerName).find(".talk").css("display", "none");
   }
 
   function destroyAllBots() {

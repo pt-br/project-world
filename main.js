@@ -9,6 +9,7 @@ var io = require('socket.io')(http);
 app.use("/css", express.static(__dirname + '/css'));
 app.use("/lib", express.static(__dirname + '/lib'));
 app.use("/js", express.static(__dirname + '/js'));
+app.use("/images", express.static(__dirname + '/images'));
 
 app.get('/', function (req, res) {
     fs.readFile(__dirname + '/index.html', function(err, data) {               

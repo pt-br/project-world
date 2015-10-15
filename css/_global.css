@@ -5,14 +5,17 @@
 
 body {
   font-family: helvetica;
+  background-size: cover !important;
 }
 
 .timeDay {
   background: rgb(101, 255, 213);
+  background-image: url("../images/day.jpg");
 }
 
 .timeNight {
   background: rgb(50, 100, 103);
+  background-image: url("../images/night.jpg");
 }
 
 .bot {
@@ -46,20 +49,27 @@ body {
 
 .think {
   font-style: italic;
-  color: #615E5E;
-  display: block;
+  color: #FFFFFF;
+  display: none;
   position: relative;
   top: -45px;
   left: 5px;
   font-size: 14px;
   width: 410px;
+  background-color: rgba(0, 0, 0, 0.54);
+  padding: 4px;
+  border-radius: 2px;
 }
 
 .talk {
-  display: block;
+  display: none;
   position: relative;
-  top: -45px;
+  top: -14px;
   left: 60px;
   font-size: 14px;
   width: 410px;
+  background-color: rgba(255, 255, 255, 0.72);
+  width: 410px;
+  padding: 4px;
+  color: #16536D;
 }
