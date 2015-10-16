@@ -66,7 +66,7 @@ function Bot($botName, $gender, $parent1, $parent2) {
   $this.enjoyingConversation = 0;
   $this.top = 0;
   $this.left = 0;
-  $this.face = "";
+  $this.face;
   $this.friends = [];
   $this.enemies = [];
   $this.nextTo = [];
@@ -495,13 +495,17 @@ function say() {
 
 function spawnBaby($bot, $botPartner) {
   var $newBot;
-  request('http://api.randomuser.me/', function (error, response, data) {
+  request('http://api.randomuser.me', function (error, response, data) {
   if (!error && response.statusCode == 200) {
       jsonObject = JSON.parse(data);
       var $name = jsonObject.results[0].user.name.first;
       var $gender = jsonObject.results[0].user.gender;
       $newBot = new Bot($name, $gender, $bot.getName(), $botPartner.getName());
-      io.emit("baby_bot", $newBot);
+      setTimeout(function() {
+        // Time to make sure that images will be requested from randomuser.me
+        io.emit("baby_bot", $newBot);
+      }, 1000);
+      
     }
   });
 }
@@ -617,11 +621,11 @@ function initializeMatrix() {
   $botList = [];
   $$botHonki = new Bot("Honki", "male", "world", "world");
   $$botBob = new Bot("Bob", "male", "world", "world");
-  // $$botGeorge = new Bot("George", "male", "world", "world");
+  $$botGeorge = new Bot("George", "male", "world", "world");
 
-  // $$botAnna = new Bot("Anna", "female", "world", "world");
-  // $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  // $$botLux = new Bot("Lux", "female", "world", "world");
+  $$botAnna = new Bot("Anna", "female", "world", "world");
+  $$botTiffy = new Bot("Tiffy", "female", "world", "world");
+  $$botLux = new Bot("Lux", "female", "world", "world");
 
   setTimeout(function() {
     spawnBaby($$botHonki, $$botBob);

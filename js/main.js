@@ -72,7 +72,7 @@ $(function() {
         jQuery("#"+$currentBotName).append("<div class='think'></div>");
         jQuery("#"+$currentBotName).append("<div class='talk'></div>");
       }
-    }, 300);
+    }, 1000);
   }
 
   function drawBabyBot($babyBot) {
@@ -81,9 +81,6 @@ $(function() {
     var $currentBotFace = $babyBot.face;
     var $currentBotTop = $babyBot.top;
     var $currentBotLeft = $babyBot.left;
-    console.log("BABY BOT BELOW:");
-    console.log($babyBot.gender);
-    console.log($currentBotFace);
     jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
     jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
     jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
