@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var request = require('request');
-var cheerio = require('cheerio');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -11,15 +10,9 @@ app.use("/lib", express.static(__dirname + '/lib'));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/images", express.static(__dirname + '/images'));
 
-app.get('/', function (req, res) {
-    fs.readFile(__dirname + '/index.html', function(err, data) {               
-        var $ = cheerio.load(data);
-
-        //$("body").addClass("timeNight");
-
-        res.send($.html());
-    });
- });
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
 io.on('connection', function(socket) {
   console.log("User connected");
@@ -625,12 +618,7 @@ function initializeMatrix() {
 
   $$botAnna = new Bot("Anna", "female", "world", "world");
   $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  $$botLux = new Bot("Lux", "female", "world", "world");
-
-  setTimeout(function() {
-    spawnBaby($$botHonki, $$botBob);
-  }, 3000);
-  
+  $$botLux = new Bot("Lux", "female", "world", "world"); 
   
 
   timeInfo();
