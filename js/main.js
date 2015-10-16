@@ -41,6 +41,10 @@ $(function() {
         clearTalk(botName, botPartnerName);
       });
 
+      socket.on("baby_bot", function(babyBot) {
+        drawBabyBot(babyBot)
+      });
+
     });
 
   /// DOM FUNCTIONS END ///
@@ -69,6 +73,23 @@ $(function() {
         jQuery("#"+$currentBotName).append("<div class='talk'></div>");
       }
     }, 300);
+  }
+
+  function drawBabyBot($babyBot) {
+    var $currentBotName = $babyBot.name;
+    var $currentBotGender = $babyBot.gender;
+    var $currentBotFace = $babyBot.face;
+    var $currentBotTop = $babyBot.top;
+    var $currentBotLeft = $babyBot.left;
+    console.log("BABY BOT BELOW:");
+    console.log($babyBot.gender);
+    console.log($currentBotFace);
+    jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
+    jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
+    jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
+    jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
+    jQuery("#"+$currentBotName).append("<div class='think'></div>");
+    jQuery("#"+$currentBotName).append("<div class='talk'></div>");
   }
 
   function drawMovement(top, left, botName) {

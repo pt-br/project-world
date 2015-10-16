@@ -24,7 +24,7 @@ app.get('/', function (req, res) {
 io.on('connection', function(socket) {
   console.log("User connected");
 
-  console.log("Load world - New socket connected");
+  console.log("Load world - New connection");
   socket.emit("load_world", $botList, $$world.dayTimeClass);
   
   socket.on('walk', function(top, left) {
@@ -57,7 +57,7 @@ function loadWords() {
   });
 }
 
-function Bot($botName, $gender) {
+function Bot($botName, $gender, $parent1, $parent2) {
   var $this = this;
   $this.name = $botName;
   $this.gender = $gender;
@@ -70,6 +70,7 @@ function Bot($botName, $gender) {
   $this.friends = [];
   $this.enemies = [];
   $this.nextTo = [];
+  $this.parents = [$parent1, $parent2];
 
   request('http://api.randomuser.me/?gender='+$gender, function (error, response, data) {
   if (!error && response.statusCode == 200) {
@@ -335,12 +336,127 @@ Bot.prototype.fight = function() {
   var $this = this;
   $this.busy = true;
 }
+Bot.prototype.haveBaby = function() {
+  var $this = this;
+  console.log("[ THINKING ] " + $this.getName() + " thinks: Hmm... would be interesting to have a baby...");
+  io.emit("think", $this.getName(), "Hmm... would be interesting to have a baby...");
+
+  var $nextTotal = $this.nextTo.length;
+  var $nextMax = $nextTotal -1;
+  if($nextTotal > 0) {
+    // Choose one of the next elements
+    var $choosenBotId = Math.floor(Math.random() * $nextMax);
+    var $botPartner = $this.nextTo[$choosenBotId];
+    if(!$botPartner.busy) {
+      // Partner is not busy
+      var $relationShip = checkRelationship($this, $botPartner);
+      if($this.gender != $botPartner.gender) {
+        // Partner is same gender
+        if($relationShip == "friend") {
+          // Partner is friend, ask for a baby
+          console.log("[ THINKING ] " + $this.getName() + " thinks: I should ask " + $botPartner.getName() + " for a baby... @.@");
+          io.emit("think", $this.getName(), "I should ask " + $botPartner.getName() + " for a baby... @.@");
+
+          $botPartner.busy = true;
+
+          console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": Look... We are friends for a long time... Don't you think that we can create a baby? :)");
+          io.emit("talk", $this.getName(), "says to " + $botPartner.getName() + ": Look... We are friends for a long time... Don't you think that we can create a baby? :)");
+        
+          setTimeout(function() {
+            var $decision1 = Math.floor((Math.random() * 6) + 1);
+
+            if($decision1 >= 3) {
+              // Proceed to next step for a baby
+              io.emit("clear_last_phrase", $this.getName());
+              console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Hmm... a baby could be nice. Are you sure?");
+              io.emit("talk", $botPartner.getName(), "says to " + $this.getName() + ": Hmm... a baby could be nice. Are you sure?");
+              setTimeout(function() {
+                // Second step decision
+                var $decision2 = Math.floor((Math.random() * 6) + 1);
+
+                if($decision2 >= 3) {
+                  // Will have a baby
+                  io.emit("clear_last_phrase", $botPartner.getName());
+                  console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": Yes! Im sure, let's have a baby :)");
+                  io.emit("talk", $this.getName(), "says to " + $botPartner.getName() + ": Yes! Im sure, let's have a baby :)");
+                  setTimeout(function() {
+
+                    // Have a baby and end haveBaby
+
+                    spawnBaby($this, $botPartner);
+
+                    io.emit("end_talk", $this.getName(), $botPartner.getName());
+                    $this.busy = false;
+                    $botPartner.busy = false;
+
+                  }, 5000);
+                }
+                else {
+                  // Will not have a baby on step 2
+                  io.emit("clear_last_phrase", $botPartner.getName());
+                  console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": Thinking better about this... I'm not ready to have a baby now :/");
+                  io.emit("talk", $this.getName(), "says to " + $botPartner.getName() + ": Thinking better about this... I'm not ready to have a baby now :/");
+                  setTimeout(function() {
+
+                    // End haveBaby
+                    io.emit("end_talk", $this.getName(), $botPartner.getName());
+                    $this.busy = false;
+                    $botPartner.busy = false;
+
+                  }, 5000);
+                }
+
+              }, 2000);
+            }
+            else {
+              // Will not have a baby on step 1
+              io.emit("clear_last_phrase", $this.getName());
+              console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": I don't think that this is a good idea... is too soon to have a baby...");
+              io.emit("talk", $botPartner.getName(), "says to " + $this.getName() + ": I don't think that this is a good idea... is too soon to have a baby...");
+              setTimeout(function() {
+
+                // End haveBaby
+                io.emit("end_talk", $this.getName(), $botPartner.getName());
+                $this.busy = false;
+                $botPartner.busy = false;
+
+              }, 5000);
+            }
+          }, 2000);
+        } 
+        else {
+          // Partner is not friend
+          console.log("[ THINKING ] " + $this.getName() + " thinks: I would ask "+ $botPartner.getName() + " for a baby, but we are not friends :(");
+          io.emit("think", $this.getName(), "I would ask "+ $botPartner.getName() + " for a baby, but we are not friends :(");
+          $this.busy = false;
+        }
+      } else {
+        // Partner is same gender
+        console.log("[ THINKING ] " + $this.getName() + " thinks: I would ask "+ $botPartner.getName() + " for a baby, but we are same gender :(");
+        io.emit("think", $this.getName(), "I would ask "+ $botPartner.getName() + " for a baby, but we are same gender :(");
+        $this.busy = false;
+      }
+    } else {
+      // Partner is busy
+      console.log("[ THINKING ] " + $this.getName() + " thinks: There is nobody available to have a baby :(");
+      io.emit("think", $this.getName(), "There is nobody available to have a baby :(");
+      $this.busy = false;
+    }
+  }
+  else {
+    console.log("[ THINKING ] " + $this.getName() + " thinks: There is nobody near me to ask for a baby :(");
+    io.emit("think", $this.getName(), "There is nobody near me to ask for a baby :(");
+    $this.busy = false;
+  }
+}
+
+
 
 Bot.prototype.think = function() {
   var $this = this;
   if(!$this.busy) {
     console.log("[ THINKING ] " + $this.getName() + " thinks: Hm... I'm thinking...");
-    var $newDesire = Math.floor((Math.random() * 3) + 1);
+    var $newDesire = Math.floor((Math.random() * 4) + 1);
     switch($newDesire) {
       case 1: 
         $$world.setBotThinkTime($this);
@@ -354,6 +470,11 @@ Bot.prototype.think = function() {
         $$world.setBotThinkTime($this);
         $this.busy = true;
         $this.talk();
+        break;
+      case 4: 
+        $$world.setBotThinkTime($this);
+        $this.busy = true;
+        $this.haveBaby();
         break;
     }
   }
@@ -370,6 +491,19 @@ function say() {
     $phrase = $phrase + " " + $word; 
   }
   return $phrase;
+}
+
+function spawnBaby($bot, $botPartner) {
+  var $newBot;
+  request('http://api.randomuser.me/', function (error, response, data) {
+  if (!error && response.statusCode == 200) {
+      jsonObject = JSON.parse(data);
+      var $name = jsonObject.results[0].user.name.first;
+      var $gender = jsonObject.results[0].user.gender;
+      $newBot = new Bot($name, $gender, $bot.getName(), $botPartner.getName());
+      io.emit("baby_bot", $newBot);
+    }
+  });
 }
 
 function removeFriend($$bot, $$friend) {
@@ -481,9 +615,19 @@ function initializeMatrix() {
   loadWords();
 
   $botList = [];
-  $$botHonki = new Bot("Honki", "male");
-  $$botAnna = new Bot("Anna", "female");
-  $$botBob = new Bot("Bob", "male");
+  $$botHonki = new Bot("Honki", "male", "world", "world");
+  $$botBob = new Bot("Bob", "male", "world", "world");
+  // $$botGeorge = new Bot("George", "male", "world", "world");
+
+  // $$botAnna = new Bot("Anna", "female", "world", "world");
+  // $$botTiffy = new Bot("Tiffy", "female", "world", "world");
+  // $$botLux = new Bot("Lux", "female", "world", "world");
+
+  setTimeout(function() {
+    spawnBaby($$botHonki, $$botBob);
+  }, 3000);
+  
+  
 
   timeInfo();
 }
