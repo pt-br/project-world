@@ -58,7 +58,6 @@ $(function() {
   }
   
   function drawCurrentBots($botInfo) {
-    console.log("Drawning current bots");
     $totalBots = $botInfo.length;
     $maxBotIndex = $totalBots -1;
     for(var i = 0; i <= $maxBotIndex; i++) {
@@ -106,7 +105,6 @@ $(function() {
     }, {
       duration: 3000,
       done:function() {
-        console.log("ending move");
         socket.emit("end_walk");
       }
     });

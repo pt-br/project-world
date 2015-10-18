@@ -755,7 +755,7 @@ function checkProximity() {
                   io.emit("think", $botList[$currentIndex].id, "I HATE YOU " + $botList[i2].getName() + "!");
 
                   var $wannaFight = Math.floor((Math.random() * 10) + 1);
-                  if($wannaFight > 5) {
+                  if($wannaFight > 8) {
                     if($botList[$currentIndex].busy == false && $botList[i2].busy == false) {
                       // Both are not busy, start a fight
                       $botList[$currentIndex].fight($botList[$currentIndex], $botList[i2]);
