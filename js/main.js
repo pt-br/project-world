@@ -12,13 +12,13 @@ $(function() {
     .on("ready", function() {
       socket = io();
 
-      socket.on("load_world", function(botList, time) {
+      socket.on("load_world", function(botInfo, time) {
         destroyAllBots();
 
         jQuery("body").addClass(time);
 
-        var $botList = botList;
-        drawCurrentBots($botList)
+        var $botInfo = botInfo;
+        drawCurrentBots($botInfo);
       });
 
       socket.on("walk", function(top, left, botName) {
@@ -53,34 +53,32 @@ $(function() {
     jQuery("body").addClass("time");  
   }
   
-  function drawCurrentBots($botList) {
-    setTimeout(function() {
-      console.log("Drawning current bots");
-      $totalBots = $botList.length;
-      $maxBotIndex = $totalBots -1;
-      for(var i = 0; i <= $maxBotIndex; i++) {
-        var $currentIndex = i;
-        var $currentBotName = $botList[i].name;
-        var $currentBotGender = $botList[i].gender;
-        var $currentBotFace = $botList[i].face;
-        var $currentBotTop = $botList[i].top;
-        var $currentBotLeft = $botList[i].left;
-        jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
-        jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
-        jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
-        jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
-        jQuery("#"+$currentBotName).append("<div class='think'></div>");
-        jQuery("#"+$currentBotName).append("<div class='talk'></div>");
-      }
-    }, 1000);
+  function drawCurrentBots($botInfo) {
+    console.log("Drawning current bots");
+    $totalBots = $botInfo.length;
+    $maxBotIndex = $totalBots -1;
+    for(var i = 0; i <= $maxBotIndex; i++) {
+      var $currentIndex = i;
+      var $currentBotName = $botInfo[i][0];
+      var $currentBotGender = $botInfo[i][1];
+      var $currentBotFace = $botInfo[i][2];
+      var $currentBotTop = $botInfo[i][3];
+      var $currentBotLeft = $botInfo[i][4];
+      jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
+      jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
+      jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
+      jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
+      jQuery("#"+$currentBotName).append("<div class='think'></div>");
+      jQuery("#"+$currentBotName).append("<div class='talk'></div>");
+    }
   }
 
   function drawBabyBot($babyBot) {
-    var $currentBotName = $babyBot.name;
-    var $currentBotGender = $babyBot.gender;
-    var $currentBotFace = $babyBot.face;
-    var $currentBotTop = $babyBot.top;
-    var $currentBotLeft = $babyBot.left;
+    var $currentBotName = $babyBot[0];
+    var $currentBotGender = $babyBot[1];
+    var $currentBotFace = $babyBot[2];
+    var $currentBotTop = $babyBot[3];
+    var $currentBotLeft = $babyBot[4];
     jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
     jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
     jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
