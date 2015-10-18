@@ -21,24 +21,24 @@ $(function() {
         drawCurrentBots($botInfo);
       });
 
-      socket.on("walk", function(top, left, botName) {
-        drawMovement(top, left, botName);
+      socket.on("walk", function(top, left, botId) {
+        drawMovement(top, left, botId);
       });
 
-      socket.on("think", function(botName, thinkMessage) {
-        drawThink(botName, thinkMessage);
+      socket.on("think", function(botId, thinkMessage) {
+        drawThink(botId, thinkMessage);
       });
 
       socket.on("talk", function(botName, talkMessage) {
         drawTalk(botName, talkMessage);
       });
 
-      socket.on("clear_last_phrase", function(botName) {
-        clearLastPhrase(botName);
+      socket.on("clear_last_phrase", function(botId) {
+        clearLastPhrase(botId);
       });
 
-      socket.on("end_talk", function(botName, botPartnerName) {
-        clearTalk(botName, botPartnerName);
+      socket.on("end_talk", function(botId, botPartnerId) {
+        clearTalk(botId, botPartnerId);
       });
 
       socket.on("baby_bot", function(babyBot) {
@@ -89,8 +89,8 @@ $(function() {
     jQuery("#"+$currentBotId).append("<div class='talk'></div>");
   }
 
-  function drawMovement(top, left, botName) {
-    jQuery("#"+botName).animate({ 
+  function drawMovement(top, left, botId) {
+    jQuery("#"+botId).animate({ 
       top: top, 
       left: left
     }, {
@@ -102,26 +102,26 @@ $(function() {
     });
   }
 
-  function drawThink(botName, thinkMessage) {
-    jQuery("#"+botName).find(".think").css("display", "block");
-    jQuery("#"+botName).find(".think").text("[Thinking] " + thinkMessage);
+  function drawThink(botId, thinkMessage) {
+    jQuery("#"+botId).find(".think").css("display", "block");
+    jQuery("#"+botId).find(".think").text("[Thinking] " + thinkMessage);
   }
 
-  function drawTalk(botName, talkMessage) {
-    jQuery("#"+botName).find(".talk").css("display", "block");
-    jQuery("#"+botName).find(".talk").text(talkMessage);
+  function drawTalk(botId, talkMessage) {
+    jQuery("#"+botId).find(".talk").css("display", "block");
+    jQuery("#"+botId).find(".talk").text(talkMessage);
   }
 
-  function clearLastPhrase(botName) {
-    jQuery("#"+botName).find(".talk").text("");
-    jQuery("#"+botName).find(".talk").css("display", "none");
+  function clearLastPhrase(botId) {
+    jQuery("#"+botId).find(".talk").text("");
+    jQuery("#"+botId).find(".talk").css("display", "none");
   }
 
-  function clearTalk(botName, botPartnerName) {
-    jQuery("#"+botName).find(".talk").text("");
-    jQuery("#"+botName).find(".talk").css("display", "none");
-    jQuery("#"+botPartnerName).find(".talk").text("");
-    jQuery("#"+botPartnerName).find(".talk").css("display", "none");
+  function clearTalk(botId, botPartnerId) {
+    jQuery("#"+botId).find(".talk").text("");
+    jQuery("#"+botId).find(".talk").css("display", "none");
+    jQuery("#"+botPartnerId).find(".talk").text("");
+    jQuery("#"+botPartnerId).find(".talk").css("display", "none");
   }
 
   function destroyAllBots() {
