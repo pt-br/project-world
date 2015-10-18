@@ -733,41 +733,48 @@ function checkProximity() {
         }
 
         if($proximityValue <= 100) {
-          // The current element is next to this element
-          console.log("[INFO] "+ $botList[$currentIndex].getName() + " is next to " + $botList[i2].getName());
-          $botList[$currentIndex].nextTo.push($botList[i2]);
+          if($botList[$currentIndex].live) {
+            // The current element is next to this element
+            console.log("[INFO] "+ $botList[$currentIndex].getName() + " is next to " + $botList[i2].getName());
+            $botList[$currentIndex].nextTo.push($botList[i2]);
 
-          var $relationShip = checkRelationship($botList[$currentIndex], $botList[i2]);
+            var $relationShip = checkRelationship($botList[$currentIndex], $botList[i2]);
 
-          if($botList[i2].live) {
-            if(!$botList[$currentIndex].busy | !$botList[i2].getName()) {
-              if($relationShip == "none") {
-                console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
-                io.emit("think", $botList[$currentIndex].id, "I don't know you, " + $botList[i2].getName());
-              }
-              else if($relationShip == "friend") {
-                console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
-                io.emit("think", $botList[$currentIndex].id, "Hey " + $botList[i2].getName() + ", my friend!");
-              }
-              else if($relationShip == "enemy") {
-                console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
-                io.emit("think", $botList[$currentIndex].id, "I HATE YOU " + $botList[i2].getName() + "!");
+            if($botList[i2].live) {
+              if(!$botList[$currentIndex].busy | !$botList[i2].getName()) {
+                if($relationShip == "none") {
+                  console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
+                  io.emit("think", $botList[$currentIndex].id, "I don't know you, " + $botList[i2].getName());
+                }
+                else if($relationShip == "friend") {
+                  console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
+                  io.emit("think", $botList[$currentIndex].id, "Hey " + $botList[i2].getName() + ", my friend!");
+                }
+                else if($relationShip == "enemy") {
+                  console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
+                  io.emit("think", $botList[$currentIndex].id, "I HATE YOU " + $botList[i2].getName() + "!");
 
-                var $wannaFight = Math.floor((Math.random() * 10) + 1);
-                if($wannaFight > 5) {
-                  if($botList[$currentIndex].busy == false && $botList[i2].busy == false) {
-                    // Both are not busy, start a fight
-                    $botList[$currentIndex].fight($botList[$currentIndex], $botList[i2]);
+                  var $wannaFight = Math.floor((Math.random() * 10) + 1);
+                  if($wannaFight > 5) {
+                    if($botList[$currentIndex].busy == false && $botList[i2].busy == false) {
+                      // Both are not busy, start a fight
+                      $botList[$currentIndex].fight($botList[$currentIndex], $botList[i2]);
+                    }
                   }
                 }
               }
             }
+            else {
+              console.log("[ " + $botList[$currentIndex].getName() + " ] Poor " + $botList[i2].getName() + "... died too young... ");
+              io.emit("think", $botList[$currentIndex].id, "Poor " + $botList[i2].getName() + "... died too young...");
+            }
           }
           else {
-            console.log("[ " + $botList[$currentIndex].getName() + " ] Poor " + $botList[i2].getName() + "... died too young... ");
-            io.emit("think", $botList[$currentIndex].id, "Poor " + $botList[i2].getName() + "... died too young...");
+            // Do nothing, current bot is dead
           }
-        }         
+          
+        }
+
 
       } else {
         // Matching same bot, just ignore
