@@ -45,6 +45,10 @@ $(function() {
         drawBabyBot(babyBotInfo);
       });
 
+      socket.on("bot_death", function(botDeadId) {
+        drawDeadBot(botDeadId);
+      });
+
     });
 
   /// DOM FUNCTIONS END ///
@@ -122,6 +126,12 @@ $(function() {
     jQuery("#"+botId).find(".talk").css("display", "none");
     jQuery("#"+botPartnerId).find(".talk").text("");
     jQuery("#"+botPartnerId).find(".talk").css("display", "none");
+  }
+
+  function drawDeadBot(botDeadId) {
+    jQuery("#"+botDeadId).css("background-image", "url(/images/rip.png)");
+    jQuery("#"+botDeadId).find(".think").text("[DEAD]");
+    jQuery("#"+botDeadId).find(".think").css({left: "-5px", width: "50px"});
   }
 
   function destroyAllBots() {

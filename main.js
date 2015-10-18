@@ -30,8 +30,8 @@ io.on('connection', function(socket) {
   socket.emit("load_world", $botInfo, $$world.dayTimeClass);
   
   socket.on('walk', function(top, left) {
-    console.log("top: " + top);
-    console.log("left: " + left);
+    //console.log("top: " + top);
+    //console.log("left: " + left);
   });
 
   socket.on('end_walk', function() {
@@ -61,12 +61,13 @@ function loadWords() {
 function Bot($botName, $gender, $parent1, $parent2) {
   var $this = this;
   $this.name = $botName;
+  $this.live = true;
   $this.gender = $gender;
   $this.thinkTime;
   $this.busy = false;
   $this.enjoyingConversation = 0;
-  $this.top = 0;
-  $this.left = 0;
+  $this.top = 200;
+  $this.left = 200;
   $this.face;
   $this.friends = [];
   $this.enemies = [];
@@ -89,8 +90,14 @@ function Bot($botName, $gender, $parent1, $parent2) {
 
   console.warn("[ World Info ] TimeThink of " + $this.name + " on his creation: " + $this.getThinkTime());
 
-  setInterval(function() {
-    $this.think();
+  var $lifeCicle = setInterval(function() {
+    if($this.live == true) {
+      $this.think();
+    }
+    else {
+      clearInterval($lifeCicle);
+      console.log("[DEATH]: "+ $this.getName());
+    }
   }, $this.thinkTime);
 }
 
@@ -165,9 +172,6 @@ Bot.prototype.walk = function() {
   $this.information[3] = $this.top;
   $this.information[4] = $this.left;
 
-  console.log("top: " + $moveHeigth);
-  console.log("left: " + $moveWidth);
-
   io.emit('walk', $moveHeigth, $moveWidth, $this.id); 
 }
 Bot.prototype.talk = function() {
@@ -178,7 +182,7 @@ Bot.prototype.talk = function() {
   var $nextMax = $nextTotal -1;
 
   if($nextTotal > 0) {
-    // Choice one of the next elements to talk to
+    // Choose one of the next elements to talk to
     var $choosenBotId = Math.floor(Math.random() * $nextMax);
     var $talkingPartner = $this.nextTo[$choosenBotId];
     
@@ -327,10 +331,18 @@ Bot.prototype.talk = function() {
         $this.busy = false;
       }
     } else {
-      // Partner busy, can't talk now
-      console.log("[ THINKING ] " + $this.getName() + " thinks: Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
-      io.emit("think", $this.id, "Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
-      $this.busy = false;
+      if($talkingPartner.live == true) {
+        // Partner busy, can't talk now
+        console.log("[ THINKING ] " + $this.getName() + " thinks: Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
+        io.emit("think", $this.id, "Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
+        $this.busy = false;
+      }
+      else {
+        // Partner is dead
+        console.log("[ " + $this.getName() + " ] Poor " + $talkingPartner.getName() + "... died too young... ");
+        io.emit("think", $this.id, "Poor " + $talkingPartner.getName() + "... died too young...");
+        $this.busy = false;
+      }
     }
 
   } else {
@@ -339,10 +351,6 @@ Bot.prototype.talk = function() {
     io.emit("think", $this.id, "There is nobody near me to talk :/");
     $this.busy = false;
   }
-}
-Bot.prototype.fight = function() {
-  var $this = this;
-  $this.busy = true;
 }
 Bot.prototype.haveBaby = function() {
   var $this = this;
@@ -414,7 +422,7 @@ Bot.prototype.haveBaby = function() {
                   }, 5000);
                 }
 
-              }, 2000);
+              }, 3000);
             }
             else {
               // Will not have a baby on step 1
@@ -430,7 +438,7 @@ Bot.prototype.haveBaby = function() {
 
               }, 5000);
             }
-          }, 2000);
+          }, 3000);
         } 
         else {
           // Partner is not friend
@@ -458,7 +466,134 @@ Bot.prototype.haveBaby = function() {
   }
 }
 
+Bot.prototype.fight = function($bot, $botPartner) {
+  var $this = this;
+  $this.busy = true;
+  $botPartner.busy = true;
 
+  console.log("[ FIGHT ] " + $this.getName() + " says to " + $botPartner.getName() + ": I tried to control myself, but you really are disturbing me, I'll punch you sucker!");
+  io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": I tried to control myself, but you really are disturbing me, I'll punch you sucker!");
+
+  setTimeout(function() {
+    console.log("[ FIGHT ] " + $botPartner.getName() + " says: Fuck");
+    io.emit("talk", $botPartner.id, "says: Fuck");
+    io.emit("clear_last_phrase", $this.id);
+
+    setTimeout(function() {
+      // Start the fight
+      console.log("[ FIGHT ] " + $this.getName() + ": ##%%@@@**&&&@!@@$#%$$$##%$@@!$$@#%)(*)&#%*&%");
+      io.emit("talk", $this.id, "##%%@@@**&&&@!@@$#%$$$##%$@@!$$@#%)(*)&#%*&%");
+
+      console.log("[ FIGHT ] " + $botPartner.getName() + ": &&&%@@#!@$!$@#&*&*@&*$!@$!@&*");
+      io.emit("talk", $botPartner.id, "&&&%@@#!@$!$@#&*&*@&*$!@$!@&*");
+
+      setTimeout(function() {
+        // Step 2 of fight
+        console.log("[ FIGHT ] " + $this.getName() + ": &&&*#@@#$!@$(&%%&&*&*%&*@@!!###");
+        io.emit("talk", $this.id, "&&&*#@@#$!@$(&%%&&*&*%&*@@!!###");
+
+        console.log("[ FIGHT ] " + $botPartner.getName() + ": @@##@$@%#**&&*!@@$!@$@!&*$@&*!@$&*");
+        io.emit("talk", $botPartner.id, "@@##@$@%#**&&*!@@$!@$@!&*$@&*!@$&*");
+
+        setTimeout(function() {
+          // Define what will happen - Nothing | Apologize | DEATH
+          var $endFight = Math.floor((Math.random() * 10) + 1);
+          if($endFight == 1) {
+            // Death
+
+            var $whoWillDie = Math.floor((Math.random() * 2) + 1);
+
+            if($whoWillDie == 1) {
+              // Starter of fight will die
+              console.log("[ FIGHT ] " + $this.getName() + " says: X.X");
+              io.emit("talk", $this.id, "says: X.X");
+
+              console.log("[ FIGHT ] " + $botPartner.getName() + " says to " + $this.getName() + ": Oh fuck! What I've done?!");
+              io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Oh fuck! What I've done?!");
+
+              $this.die();
+              
+              setTimeout(function() {
+                // End fight
+                io.emit("clear_last_phrase", $this.id);
+                io.emit("clear_last_phrase", $botPartner.id);
+                $botPartner.busy = false;
+
+              }, 5000);
+            }
+            else {
+              console.log("[ FIGHT ] " + $this.getName() + " says to " + $botPartner.getName() + ": I should not have taken it so seriously!!!");
+              io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": I should not have taken it so seriously!!!");
+
+              console.log("[ FIGHT ] " + $botPartner.getName() + " says: X.X");
+              io.emit("talk", $botPartner.id, "says: X.X");
+
+              $botPartner.die();
+              
+              setTimeout(function() {
+                // End fight
+                io.emit("clear_last_phrase", $this.id);
+                io.emit("clear_last_phrase", $botPartner.id);
+                $this.busy = false;
+
+              }, 5000);
+            }
+          }
+          else if($endFight == 2) {
+            // Apologize
+            console.log("[ FIGHT ] " + $this.getName() + " says to " + $botPartner.getName() + ": Wow... I'm really sorry... We should not be enemies. Do you forgive me?");
+            io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": Wow... I'm really sorry... We should not be enemies. Do you forgive me?");
+
+            console.log("[ FIGHT ] " + $botPartner.getName() + " says to " + $this.getName() + ": You are right. Let's be friends.");
+            io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": You are right. Let's be friends.");
+
+            removeEnemy($this, $botPartner);
+
+            $this.friends.push($botPartner);
+            $botPartner.friends.push($this);
+            
+            setTimeout(function() {
+              // End fight
+              io.emit("end_talk", $this.id, $botPartner.id);
+              $this.busy = false;
+              $botPartner.busy = false;
+
+            }, 3000);
+          }
+          else if($endFight >= 3) {
+            // Nothing
+            console.log("[ FIGHT ] " + $this.getName() + " says to " + $botPartner.getName() + ": You are lucky to be alive! Get away from me!");
+            io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": You are lucky to be alive! Get away from me!");
+
+            console.log("[ FIGHT ] " + $botPartner.getName() + " says to " + $this.getName() + ": Fuck you...");
+            io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Fuck you...");
+
+            setTimeout(function() {
+              // End fight
+              io.emit("end_talk", $this.id, $botPartner.id);
+              $this.busy = false;
+              $botPartner.busy = false;
+
+            }, 3000);
+
+          }
+
+
+        }, 3000);
+
+      });
+
+    }, 3000);
+
+
+  }, 3000);
+}
+
+Bot.prototype.die = function() {
+  var $this = this;
+  $this.live = false;
+  io.emit("bot_death", $this.id);
+}
 
 Bot.prototype.think = function() {
   var $this = this;
@@ -528,6 +663,16 @@ function removeFriend($$bot, $$friend) {
   }
 }
 
+function removeEnemy($$bot, $$enemy) {
+  var $maxEnemies = $$bot.enemies.length -1 ;
+  for(var i = 0; i <= $maxEnemies; i++) {
+    if($$enemy == $$bot.enemies[i]) {
+      var $index = $$bot.enemies.indexOf($$bot.enemies[i]);
+      $$bot.enemies.splice($index, 1);
+    }
+  }
+}
+
 function cleanProximity($$botObject) {
   // Clean only the nextTo property of the bots affected by a walk
   var $totalNextBots = $$botObject.nextTo.length;
@@ -588,19 +733,34 @@ function checkProximity() {
           $botList[$currentIndex].nextTo.push($botList[i2]);
 
           var $relationShip = checkRelationship($botList[$currentIndex], $botList[i2]);
-          if(!$botList[$currentIndex].busy | !$botList[i2].getName()) {
-            if($relationShip == "none") {
-              console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
-              io.emit("think", $botList[$currentIndex].id, "I don't know you, " + $botList[i2].getName());
+
+          if($botList[i2].live) {
+            if(!$botList[$currentIndex].busy | !$botList[i2].getName()) {
+              if($relationShip == "none") {
+                console.log("[ " + $botList[$currentIndex].getName() + " ] I don't know you, " + $botList[i2].getName());
+                io.emit("think", $botList[$currentIndex].id, "I don't know you, " + $botList[i2].getName());
+              }
+              else if($relationShip == "friend") {
+                console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
+                io.emit("think", $botList[$currentIndex].id, "Hey " + $botList[i2].getName() + ", my friend!");
+              }
+              else if($relationShip == "enemy") {
+                console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
+                io.emit("think", $botList[$currentIndex].id, "I HATE YOU " + $botList[i2].getName() + "!");
+
+                var $wannaFight = Math.floor((Math.random() * 10) + 1);
+                if($wannaFight > 5) {
+                  if($botList[$currentIndex].busy == false && $botList[i2].busy == false) {
+                    // Both are not busy, start a fight
+                    $botList[$currentIndex].fight($botList[$currentIndex], $botList[i2]);
+                  }
+                }
+              }
             }
-            else if($relationShip == "friend") {
-              console.log("[ " + $botList[$currentIndex].getName() + " ] Hey " + $botList[i2].getName() + ", my friend!");
-              io.emit("think", $botList[$currentIndex].id, "Hey " + $botList[i2].getName() + ", my friend!");
-            }
-            else if($relationShip == "enemy") {
-              console.error("[ " + $botList[$currentIndex].getName() + " ] I HATE YOU " + $botList[i2].getName() + "!");
-              io.emit("think", $botList[$currentIndex].id, "I HATE YOU " + $botList[i2].getName() + "!");
-            }
+          }
+          else {
+            console.log("[ " + $botList[$currentIndex].getName() + " ] Poor " + $botList[i2].getName() + "... died too young... ");
+            io.emit("think", $botList[$currentIndex].id, "Poor " + $botList[i2].getName() + "... died too young...");
           }
         }         
 
@@ -630,7 +790,7 @@ function initializeMatrix() {
   $$botHonki = new Bot("Honki", "male", "world", "world");
   $$botBob = new Bot("Bob", "male", "world", "world");
   $$botGeorge = new Bot("George", "male", "world", "world");
-
+  
   $$botAnna = new Bot("Anna", "female", "world", "world");
   $$botTiffy = new Bot("Tiffy", "female", "world", "world");
   $$botLux = new Bot("Lux", "female", "world", "world"); 
