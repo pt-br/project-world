@@ -41,8 +41,8 @@ $(function() {
         clearTalk(botId, botPartnerId);
       });
 
-      socket.on("baby_bot", function(babyBot) {
-        drawBabyBot(babyBot)
+      socket.on("baby_bot", function(babyBotInfo) {
+        drawBabyBot(babyBotInfo);
       });
 
     });
@@ -74,13 +74,13 @@ $(function() {
     }
   }
 
-  function drawBabyBot($babyBot) {
-    var $currentBotName = $babyBot[0];
-    var $currentBotGender = $babyBot[1];
-    var $currentBotFace = $babyBot[2];
-    var $currentBotTop = $babyBot[3];
-    var $currentBotLeft = $babyBot[4];
-    var $currentBotId = $babyBot[i][5];
+  function drawBabyBot($babyBotInfo) {
+    var $currentBotName = $babyBotInfo[0];
+    var $currentBotGender = $babyBotInfo[1];
+    var $currentBotFace = $babyBotInfo[2];
+    var $currentBotTop = $babyBotInfo[3];
+    var $currentBotLeft = $babyBotInfo[4];
+    var $currentBotId = $babyBotInfo[5];
     jQuery("body").append("<div class='bot' id='"+ $currentBotId +"' name='"+ $currentBotName + "'></div>");
     jQuery("#"+$currentBotId).css({top: $currentBotTop, left: $currentBotLeft});
     jQuery("#"+$currentBotId).css("background-image", "url(" + $currentBotFace + ")");
