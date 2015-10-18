@@ -64,12 +64,13 @@ $(function() {
       var $currentBotFace = $botInfo[i][2];
       var $currentBotTop = $botInfo[i][3];
       var $currentBotLeft = $botInfo[i][4];
-      jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
-      jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
-      jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
-      jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
-      jQuery("#"+$currentBotName).append("<div class='think'></div>");
-      jQuery("#"+$currentBotName).append("<div class='talk'></div>");
+      var $currentBotId = $botInfo[i][5];
+      jQuery("body").append("<div class='bot' id='"+ $currentBotId +"' name='"+ $currentBotName + "'></div>");
+      jQuery("#"+$currentBotId).css({top: $currentBotTop, left: $currentBotLeft});
+      jQuery("#"+$currentBotId).css("background-image", "url(" + $currentBotFace + ")");
+      jQuery("#"+$currentBotId).attr("bot-gender", $currentBotGender);
+      jQuery("#"+$currentBotId).append("<div class='think'></div>");
+      jQuery("#"+$currentBotId).append("<div class='talk'></div>");
     }
   }
 
@@ -79,12 +80,13 @@ $(function() {
     var $currentBotFace = $babyBot[2];
     var $currentBotTop = $babyBot[3];
     var $currentBotLeft = $babyBot[4];
-    jQuery("body").append("<div class='bot' id='"+ $currentBotName +"'></div>");
-    jQuery("#"+$currentBotName).css({top: $currentBotTop, left: $currentBotLeft});
-    jQuery("#"+$currentBotName).css("background-image", "url(" + $currentBotFace + ")");
-    jQuery("#"+$currentBotName).attr("bot-gender", $currentBotGender);
-    jQuery("#"+$currentBotName).append("<div class='think'></div>");
-    jQuery("#"+$currentBotName).append("<div class='talk'></div>");
+    var $currentBotId = $botInfo[i][5];
+    jQuery("body").append("<div class='bot' id='"+ $currentBotId +"' name='"+ $currentBotName + "'></div>");
+    jQuery("#"+$currentBotId).css({top: $currentBotTop, left: $currentBotLeft});
+    jQuery("#"+$currentBotId).css("background-image", "url(" + $currentBotFace + ")");
+    jQuery("#"+$currentBotId).attr("bot-gender", $currentBotGender);
+    jQuery("#"+$currentBotId).append("<div class='think'></div>");
+    jQuery("#"+$currentBotId).append("<div class='talk'></div>");
   }
 
   function drawMovement(top, left, botName) {
@@ -125,40 +127,5 @@ $(function() {
   function destroyAllBots() {
     jQuery(".bot").remove();
   }
-
-  // Will use it later...
-  // function getMessages() {
-  //   console.log("Getting messages");
-  //   $.ajax({                                      
-  //     url: $path+"php/get_messages.php",              
-  //     dataType: "json",    
-  //     success: function(data)          
-  //     {
-  //       var update_rate = data["message"][0]["update_rate"];    
-  //       var message = data["message"][0]["message"];   
-  //       console.log("sucess");
-  //       console.log(message);
-  //     } 
-  //   });
-  // }
-  
-  // function sendMessage() {    
-  //   $('#formMessage').submit(function() {
-  //     $.ajax({
-  //       type: "POST",
-  //       url: $path+"php/send_message.php",
-  //       data: $("#formMessage").serialize(),
-  //       success: function( data )
-  //       {
-  //         $(".boxInput").val("");
-  //       }
-  //     });
-  //     event.preventDefault();
-  //   });
-  // }
-
-  /******************************** LIFE FUNCTIONS END *****************************************/
-
-
 
 });
