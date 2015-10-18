@@ -30,7 +30,7 @@ body {
 }
 
 .bot:after {
-  content: attr(id);
+  content: attr(name);
   font-size: 14px;
   font-weight: bold;
   color: #448AD8;

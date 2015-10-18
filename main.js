@@ -53,7 +53,6 @@ function loadWords() {
     if(err) throw err;
     var $allText = data.toString();
     $$wordList = $allText.split(/\n/);
-    //console.log($$wordList);
   });
 }
 
@@ -71,13 +70,14 @@ function Bot($botName, $gender, $parent1, $parent2) {
   $this.enemies = [];
   $this.nextTo = [];
   $this.parents = [$parent1, $parent2];
+  $this.id = $botList.length;
   $this.information = [];
 
   request('http://api.randomuser.me/?gender='+$gender, function (error, response, data) {
   if (!error && response.statusCode == 200) {
       jsonObject = JSON.parse(data);
       $this.face = jsonObject.results[0].user.picture.thumbnail;
-      $this.information = [$this.name, $this.gender, $this.face, $this.top, $this.left];
+      $this.information = [$this.name, $this.gender, $this.face, $this.top, $this.left, $this.id];
     }
   });
 
@@ -632,9 +632,6 @@ function initializeMatrix() {
   $$botAnna = new Bot("Anna", "female", "world", "world");
   $$botTiffy = new Bot("Tiffy", "female", "world", "world");
   $$botLux = new Bot("Lux", "female", "world", "world"); 
-
-  spawnBaby($$botHonki, $$botAnna);
-  
 
   timeInfo();
 }
