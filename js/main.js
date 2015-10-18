@@ -69,12 +69,18 @@ $(function() {
       var $currentBotTop = $botInfo[i][3];
       var $currentBotLeft = $botInfo[i][4];
       var $currentBotId = $botInfo[i][5];
+      var $currentBotLife = $botInfo[i][6];
       jQuery("body").append("<div class='bot' id='"+ $currentBotId +"' name='"+ $currentBotName + "'></div>");
       jQuery("#"+$currentBotId).css({top: $currentBotTop, left: $currentBotLeft});
       jQuery("#"+$currentBotId).css("background-image", "url(" + $currentBotFace + ")");
       jQuery("#"+$currentBotId).attr("bot-gender", $currentBotGender);
       jQuery("#"+$currentBotId).append("<div class='think'></div>");
       jQuery("#"+$currentBotId).append("<div class='talk'></div>");
+
+      if($currentBotLife == "dead") {
+        drawDeadBot($currentBotId);
+      }
+
     }
   }
 
@@ -131,7 +137,7 @@ $(function() {
   function drawDeadBot(botDeadId) {
     jQuery("#"+botDeadId).css("background-image", "url(/images/rip.png)");
     jQuery("#"+botDeadId).find(".think").text("[DEAD]");
-    jQuery("#"+botDeadId).find(".think").css({left: "-5px", width: "50px"});
+    jQuery("#"+botDeadId).find(".think").css({left: "-5px", width: "50px", display: "block"});
   }
 
   function destroyAllBots() {

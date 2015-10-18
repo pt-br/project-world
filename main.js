@@ -498,6 +498,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
         setTimeout(function() {
           // Define what will happen - Nothing | Apologize | DEATH
           var $endFight = Math.floor((Math.random() * 10) + 1);
+          //var $endFight = 1;
           if($endFight == 1) {
             // Death
 
@@ -592,6 +593,10 @@ Bot.prototype.fight = function($bot, $botPartner) {
 Bot.prototype.die = function() {
   var $this = this;
   $this.live = false;
+  $this.face = "/images/rip.png";
+  // Update bot information
+  $this.information[2] = "/images/rip.png";
+  $this.information.push("dead");
   io.emit("bot_death", $this.id);
 }
 
@@ -793,7 +798,7 @@ function initializeMatrix() {
   
   $$botAnna = new Bot("Anna", "female", "world", "world");
   $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  $$botLux = new Bot("Lux", "female", "world", "world"); 
+  $$botLux = new Bot("Lux", "female", "world", "world");   
 
   timeInfo();
 }
