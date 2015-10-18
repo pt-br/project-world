@@ -80,7 +80,7 @@ $(function() {
     var $currentBotFace = $babyBot[2];
     var $currentBotTop = $babyBot[3];
     var $currentBotLeft = $babyBot[4];
-    var $currentBotId = $botInfo[i][5];
+    var $currentBotId = $babyBot[i][5];
     jQuery("body").append("<div class='bot' id='"+ $currentBotId +"' name='"+ $currentBotName + "'></div>");
     jQuery("#"+$currentBotId).css({top: $currentBotTop, left: $currentBotLeft});
     jQuery("#"+$currentBotId).css("background-image", "url(" + $currentBotFace + ")");
