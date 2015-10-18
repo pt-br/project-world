@@ -6,15 +6,16 @@
 body {
   font-family: helvetica;
   background-size: cover !important;
+  background-repeat: no-repeat;
 }
 
 .timeDay {
-  background: rgb(101, 255, 213);
+  background-color: rgb(0, 52, 110);
   background-image: url("../images/day.jpg");
 }
 
 .timeNight {
-  background: rgb(50, 100, 103);
+  background-color: #051136;
   background-image: url("../images/night.jpg");
 }
 
