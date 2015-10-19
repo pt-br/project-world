@@ -333,8 +333,8 @@ Bot.prototype.talk = function() {
     } else {
       if($talkingPartner.live == true) {
         // Partner busy, can't talk now
-        console.log("[ THINKING ] " + $this.getName() + " thinks: Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
-        io.emit("think", $this.id, "Oh... I would talk with " + $talkingPartner.getName() + " but he's busy now :/");
+        console.log("[ THINKING ] " + $this.getName() + " thinks: Oh... I would talk with " + $talkingPartner.getName() + " but " + $talkingPartner.getName() + " is busy now :/");
+        io.emit("think", $this.id, "Oh... I would talk with " + $talkingPartner.getName() + " but " + $talkingPartner.getName() + " is busy now :/");
         $this.busy = false;
       }
       else {
@@ -497,9 +497,9 @@ Bot.prototype.fight = function($bot, $botPartner) {
 
         setTimeout(function() {
           // Define what will happen - Nothing | Apologize | DEATH
-          var $endFight = Math.floor((Math.random() * 10) + 1);
+          var $endFight = Math.floor((Math.random() * 100) + 1);
           //var $endFight = 1;
-          if($endFight == 1) {
+          if($endFight <= 5) {
             // Death
 
             var $whoWillDie = Math.floor((Math.random() * 2) + 1);
@@ -540,7 +540,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
               }, 5000);
             }
           }
-          else if($endFight == 2) {
+          else if($endFight > 5 && $endFight <= 20) {
             // Apologize
             console.log("[ FIGHT ] " + $this.getName() + " says to " + $botPartner.getName() + ": Wow... I'm really sorry... We should not be enemies. Do you forgive me?");
             io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": Wow... I'm really sorry... We should not be enemies. Do you forgive me?");
@@ -561,7 +561,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
 
             }, 3000);
           }
-          else if($endFight >= 3) {
+          else if($endFight > 20) {
             // Nothing
             console.log("[ FIGHT ] " + $this.getName() + " says to " + $botPartner.getName() + ": You are lucky to be alive! Get away from me!");
             io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": You are lucky to be alive! Get away from me!");
