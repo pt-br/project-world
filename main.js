@@ -4,6 +4,7 @@ var fs = require('fs');
 var request = require('request');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var Wiki = require('wikijs');
 
 app.use("/css", express.static(__dirname + '/css'));
 app.use("/lib", express.static(__dirname + '/lib'));
@@ -15,6 +16,20 @@ app.use('/favicon.ico', express.static('favicon.ico'));
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
+
+var wiki = new Wiki();
+
+// Testing wikijs module
+wiki.random().then(function(title) {
+  var randomTitle = title[0];
+  console.log(title[0]);
+  wiki.page(randomTitle).then(function(page) {
+    page.summary().then(function(content) {
+      console.log(content); 
+    });
+  });
+});
+
 
 io.on('connection', function(socket) {
   console.log("User connected");
@@ -799,13 +814,13 @@ function initializeMatrix() {
   loadWords();
 
   $botList = [];
-  $$botHonki = new Bot("Honki", "male", "world", "world");
-  $$botBob = new Bot("Bob", "male", "world", "world");
-  $$botGeorge = new Bot("George", "male", "world", "world");
+  // $$botHonki = new Bot("Honki", "male", "world", "world");
+  // $$botBob = new Bot("Bob", "male", "world", "world");
+  // $$botGeorge = new Bot("George", "male", "world", "world");
   
-  $$botAnna = new Bot("Anna", "female", "world", "world");
-  $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  $$botLux = new Bot("Lux", "female", "world", "world");   
+  // $$botAnna = new Bot("Anna", "female", "world", "world");
+  // $$botTiffy = new Bot("Tiffy", "female", "world", "world");
+  // $$botLux = new Bot("Lux", "female", "world", "world");   
 
   timeInfo();
 }
