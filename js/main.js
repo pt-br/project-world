@@ -25,6 +25,10 @@ $(function() {
         drawMovement(top, left, botId);
       });
 
+      socket.on("learn_walk", function(top, left, botId) {
+        drawLearnWalk(top, left, botId);
+      });
+
       socket.on("think", function(botId, thinkMessage) {
         drawThink(botId, thinkMessage);
       });
@@ -107,6 +111,15 @@ $(function() {
       done:function() {
         socket.emit("end_walk");
       }
+    });
+  }
+
+  function drawLearnWalk(top, left, botId) {
+    jQuery("#"+botId).animate({ 
+      top: top, 
+      left: left
+    }, {
+      duration: 3000,
     });
   }
 

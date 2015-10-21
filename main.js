@@ -17,18 +17,18 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-var wiki = new Wiki();
+wiki = new Wiki();
 
 // Testing wikijs module
-wiki.random().then(function(title) {
-  var randomTitle = title[0];
-  console.log(title[0]);
-  wiki.page(randomTitle).then(function(page) {
-    page.summary().then(function(content) {
-      console.log(content); 
-    });
-  });
-});
+// wiki.random().then(function(title) {
+//   var randomTitle = title[0];
+//   console.log(title[0]);
+//   wiki.page(randomTitle).then(function(page) {
+//     page.summary().then(function(content) {
+//       console.log(content); 
+//     });
+//   });
+// });
 
 
 io.on('connection', function(socket) {
@@ -90,6 +90,7 @@ function Bot($botName, $gender, $parent1, $parent2) {
   $this.parents = [$parent1, $parent2];
   $this.id = $botList.length;
   $this.information = [];
+  $this.knowledge = [];
 
   request('http://api.randomuser.me/?gender='+$gender, function (error, response, data) {
   if (!error && response.statusCode == 200) {
@@ -615,11 +616,77 @@ Bot.prototype.die = function() {
   io.emit("bot_death", $this.id);
 }
 
+Bot.prototype.learn = function() {
+  var $this = this;
+  console.log("[ THINKING ] " + $this.getName() + " thinks: Hm... I want to learn something new!");
+  io.emit("think", $this.id, "Hm... I want to learn something new!");
+
+  var $moveWidth = Math.floor((Math.random() * 130) + 10);
+
+  cleanProximity($this);
+
+  // Save the cordinates in the bot's object
+  $this.top = 280;
+  $this.left = $moveWidth;
+
+  // Update the bot information - top and left
+  $this.information[3] = $this.top;
+  $this.information[4] = $this.left;
+
+  io.emit('learn_walk', 280, $moveWidth, $this.id);
+
+  setTimeout(function() {
+    var newKnowledge = [];
+
+    wiki.random().then(function(title) {
+      var randomTitle = title[0];
+      // Push the keyword of the new knowledge
+      newKnowledge.push(randomTitle);
+      wiki.page(randomTitle).then(function(page) {
+        page.summary().then(function(content) {
+          // Push the content of the new knowledge
+          newKnowledge.push(content);
+          // Update bot's knowledgement
+          $this.knowledge.push(newKnowledge);
+          console.log("[ THINKING ] " + $this.getName() + " thinks: Whoah! I just learned what means " + newKnowledge[0] + "!");
+          io.emit("think", $this.id, "Whoah! I just learned what means " + newKnowledge[0] + "!");
+
+          cleanProximity($this);
+
+          var $worldHeight = 1024 - 20;
+          var $worldWidth = 780 - 20;
+          
+          var $moveHeigth = Math.floor(Math.random() * $worldHeight);
+          var $moveWidth = Math.floor(Math.random() * $worldWidth);
+          
+          var $newPosition = [$moveHeigth, $moveWidth]; 
+
+          // Save the cordinates in the bot's object
+          $this.top = $moveHeigth;
+          $this.left = $moveWidth;
+
+          // Update the bot information - top and left
+          $this.information[3] = $this.top;
+          $this.information[4] = $this.left;
+
+          io.emit('walk', $moveHeigth, $moveWidth, $this.id); 
+
+          setTimeout(function() {
+            $this.busy = false;
+          }, 5000);
+
+        });
+      });
+    });
+  }, 4000);
+  
+}
+
 Bot.prototype.think = function() {
   var $this = this;
   if(!$this.busy) {
     console.log("[ THINKING ] " + $this.getName() + " thinks: Hm... I'm thinking...");
-    var $newDesire = Math.floor((Math.random() * 4) + 1);
+    var $newDesire = Math.floor((Math.random() * 5) + 1);
     switch($newDesire) {
       case 1: 
         $$world.setBotThinkTime($this);
@@ -638,6 +705,11 @@ Bot.prototype.think = function() {
         $$world.setBotThinkTime($this);
         $this.busy = true;
         $this.haveBaby();
+        break;
+      case 5: 
+        $$world.setBotThinkTime($this);
+        $this.busy = true;
+        $this.learn();
         break;
     }
   }
@@ -814,13 +886,13 @@ function initializeMatrix() {
   loadWords();
 
   $botList = [];
-  // $$botHonki = new Bot("Honki", "male", "world", "world");
-  // $$botBob = new Bot("Bob", "male", "world", "world");
-  // $$botGeorge = new Bot("George", "male", "world", "world");
+  $$botHonki = new Bot("Honki", "male", "world", "world");
+  $$botBob = new Bot("Bob", "male", "world", "world");
+  $$botGeorge = new Bot("George", "male", "world", "world");
   
-  // $$botAnna = new Bot("Anna", "female", "world", "world");
-  // $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  // $$botLux = new Bot("Lux", "female", "world", "world");   
+  $$botAnna = new Bot("Anna", "female", "world", "world");
+  $$botTiffy = new Bot("Tiffy", "female", "world", "world");
+  $$botLux = new Bot("Lux", "female", "world", "world");   
 
   timeInfo();
 }
