@@ -50,6 +50,7 @@ body {
   width: 35px;
   padding: 5px;
   text-align: center;
+  cursor: pointer;
 }
 
 .barIcon {
@@ -164,6 +165,7 @@ body {
 
 .inspectBotName {
   display: inline-block;
+  text-transform: capitalize;
   position: relative;
   top: 15px;
   left: 10px;

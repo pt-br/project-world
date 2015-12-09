@@ -53,6 +53,16 @@ io.on('connection', function(socket) {
     checkProximity();
   });
 
+   socket.on('inspector_opened', function() {
+    $botInfo = [];
+    $botList.forEach(function(index, value) {
+      $botInfo.push($botList[value].information);
+    });
+
+    socket.emit("draw_inspector", $botInfo);
+
+  });
+
   socket.on('disconnect', function() {
     console.log("User disconnected");
   });

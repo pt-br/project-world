@@ -20,8 +20,6 @@ $(function() {
         var $botInfo = botInfo;
         drawCurrentBots($botInfo);
 
-        drawInspector($botInfo);
-
       });
 
       socket.on("walk", function(top, left, botId) {
@@ -54,6 +52,10 @@ $(function() {
 
       socket.on("bot_death", function(botDeadId) {
         drawDeadBot(botDeadId);
+      });
+
+      socket.on("draw_inspector", function(botInfo) {
+        drawInspector(botInfo);
       });
 
       // Menu functions
@@ -102,6 +104,11 @@ $(function() {
           newActive.removeClass("inactive");
           newActive.addClass("active");
           newActive.css("opacity", 1);
+
+          if(toActiveClass == "sideBarInspector") {
+            socket.emit("inspector_opened");
+          }
+
         }, 500); 
 
       });
@@ -210,6 +217,9 @@ $(function() {
   }
 
   function drawInspector($botInfo) {
+
+    jQuery(".inspectBotListContainer").html("");
+
     $totalBots = $botInfo.length;
     $maxBotIndex = $totalBots -1;
     for(var i = 0; i <= $maxBotIndex; i++) {
@@ -221,7 +231,7 @@ $(function() {
       var $currentBotLeft = $botInfo[i][4];
       var $currentBotId = $botInfo[i][5];
       var $currentBotLife = $botInfo[i][6];
-      
+
       jQuery(".inspectBotListContainer").append("<div class='inspectBot " + $currentBotId + "'></div>");
       
       var currentInspect = jQuery(".inspectBot." + $currentBotId);
