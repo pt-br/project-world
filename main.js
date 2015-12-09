@@ -72,14 +72,15 @@ io.on('connection', function(socket) {
     var $currentId = $currentBot.id;
 
     if(botId == $currentId) {
+
       var $botName = $currentBot.getName();
       var $botLive = $currentBot.live;
       var $botGender = $currentBot.gender;
       var $botFace = $currentBot.face;
-      var $botFriends = $currentBot.friends;
-      var $botEnemies = $currentBot.enemies;
-      var $botParents = $currentBot.parents;
-      var $botKnowledge = $currentBot.knowledge;
+      var $botFriends = $currentBot.friends.slice(0);
+      var $botEnemies = $currentBot.enemies.slice(0);
+      var $botParents = $currentBot.parents.slice(0);
+      var $botKnowledge = $currentBot.knowledge.slice(0)
 
       $singleBotDetails.push($botName, $botLive, $botGender, $botFace, $botFriends, $botEnemies, $botParents, $botKnowledge);
 

@@ -61,7 +61,7 @@ $(function() {
       });
 
       socket.on("send_bot_info", function(singleBotDetails) {
-        
+        console.log(singleBotDetails);
       });
 
       // Menu functions
@@ -116,15 +116,6 @@ $(function() {
           }
         }, 500); 
       });
-
-      // Inspect a bot
-      $(".inspectBot").click(function() {
-        var $bot = $(this);
-        var $botId = $bot.attr("data-bot-id");
-        socket.emit("require_bot_info", $botId);
-      });
-
-
     });
 
   /// DOM FUNCTIONS END ///
@@ -251,8 +242,15 @@ $(function() {
       currentInspect.append("<div class='inspectBotName'>" + $currentBotName + "</div>");
 
       currentInspect.find(".inspectBotPhoto").css("background-image", "url(" + $currentBotFace + ")");
-
     }
+
+    // Inspect a bot
+    $(".inspectBot").click(function() {
+      var $bot = $(this);
+      var $botId = $bot.attr("data-bot-id");
+      socket.emit("require_bot_info", $botId);
+    });
+
   }
 
 });
