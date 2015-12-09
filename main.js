@@ -172,8 +172,8 @@ Bot.prototype.walk = function() {
 
   cleanProximity($this);
 
-  var $worldHeight = 1024 - 20;
-  var $worldWidth = 780 - 20;
+  var $worldHeight = 15;
+  var $worldWidth = 600;
   
   var $moveHeigth = Math.floor(Math.random() * $worldHeight);
   var $moveWidth = Math.floor(Math.random() * $worldWidth);
@@ -830,7 +830,7 @@ Bot.prototype.learn = function() {
   console.log("[ THINKING ] " + $this.getName() + " thinks: Hm... I want to learn something new!");
   io.emit("think", $this.id, "Hm... I want to learn something new!");
 
-  var $moveWidth = Math.floor((Math.random() * 130) + 10);
+  var $moveWidth = Math.floor((Math.random() * 130) + 0);
 
   cleanProximity($this);
 
@@ -862,8 +862,8 @@ Bot.prototype.learn = function() {
 
           cleanProximity($this);
 
-          var $worldHeight = 1024 - 20;
-          var $worldWidth = 780 - 20;
+          var $worldHeight = 15;
+          var $worldWidth = 600;
           
           var $moveHeigth = Math.floor(Math.random() * $worldHeight);
           var $moveWidth = Math.floor(Math.random() * $worldWidth);

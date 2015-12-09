@@ -53,6 +53,38 @@ $(function() {
         drawDeadBot(botDeadId);
       });
 
+      // Menu functions
+      $(".sideBarButton").click(function() {
+        var barButton = $(this);
+        var barIcon = barButton.find(".barIcon");
+        var sideBar = $(".sideBar");
+        if(barButton.hasClass("barClosed")) {
+          // Must open menu
+          sideBar.css("right", 0);
+          barIcon.css("opacity", 0);
+          setTimeout(function() {
+            barIcon.removeClass("fa-bars");
+            barIcon.addClass("fa-close");
+            barIcon.css("opacity", 1);
+          }, 500);
+          
+          barButton.removeClass("barClosed");
+          barButton.addClass("barOpened");
+        } else {
+          // Must close menu
+          sideBar.css("right", -300);
+          barIcon.css("opacity", 0);
+          setTimeout(function() {
+            barIcon.removeClass("fa-close");
+            barIcon.addClass("fa-bars");
+            barIcon.css("opacity", 1);
+          }, 500);          
+
+          barButton.removeClass("barOpened");
+          barButton.addClass("barClosed");
+        }
+      });
+
     });
 
   /// DOM FUNCTIONS END ///

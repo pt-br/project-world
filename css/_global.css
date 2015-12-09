@@ -31,7 +31,25 @@ body {
   position: absolute;
   background-color: rgba(156, 156, 156, 0.76);
   top: 0;
-  right: 0;
+  right: -300px;
+  -webkit-transition: right 0.5s;
+  transition: right 0.5s;
+}
+
+.sideBarButton {
+  color: white;
+  background-color: rgba(156, 156, 156, 0.76);
+  display: block;
+  position: absolute;
+  left: -45px;
+  width: 35px;
+  padding: 5px;
+  text-align: center;
+}
+
+.barIcon {
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
 }
 
 .sideBarContainer {
