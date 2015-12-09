@@ -19,6 +19,9 @@ $(function() {
 
         var $botInfo = botInfo;
         drawCurrentBots($botInfo);
+
+        drawInspector($botInfo);
+
       });
 
       socket.on("walk", function(top, left, botId) {
@@ -204,6 +207,31 @@ $(function() {
 
   function destroyAllBots() {
     jQuery(".bot").remove();
+  }
+
+  function drawInspector($botInfo) {
+    $totalBots = $botInfo.length;
+    $maxBotIndex = $totalBots -1;
+    for(var i = 0; i <= $maxBotIndex; i++) {
+      var $currentIndex = i;
+      var $currentBotName = $botInfo[i][0];
+      var $currentBotGender = $botInfo[i][1];
+      var $currentBotFace = $botInfo[i][2];
+      var $currentBotTop = $botInfo[i][3];
+      var $currentBotLeft = $botInfo[i][4];
+      var $currentBotId = $botInfo[i][5];
+      var $currentBotLife = $botInfo[i][6];
+      
+      jQuery(".inspectBotListContainer").append("<div class='inspectBot " + $currentBotId + "'></div>");
+      
+      var currentInspect = jQuery(".inspectBot." + $currentBotId);
+      
+      currentInspect.append("<div class='inspectBotPhoto'></div>");
+      currentInspect.append("<div class='inspectBotName'>" + $currentBotName + "</div>");
+
+      currentInspect.find(".inspectBotPhoto").css("background-image", "url(" + $currentBotFace + ")");
+
+    }
   }
 
 });

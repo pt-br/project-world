@@ -1095,13 +1095,13 @@ function initializeMatrix() {
   loadWords();
 
   $botList = [];
-  // $$botHonki = new Bot("Honki", "male", "world", "world");
-  // $$botBob = new Bot("Bob", "male", "world", "world");
-  // $$botGeorge = new Bot("George", "male", "world", "world");
+  $$botHonki = new Bot("Honki", "male", "world", "world");
+  $$botBob = new Bot("Bob", "male", "world", "world");
+  $$botGeorge = new Bot("George", "male", "world", "world");
   
-  // $$botAnna = new Bot("Anna", "female", "world", "world");
-  // $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  // $$botLux = new Bot("Lux", "female", "world", "world");   
+  $$botAnna = new Bot("Anna", "female", "world", "world");
+  $$botTiffy = new Bot("Tiffy", "female", "world", "world");
+  $$botLux = new Bot("Lux", "female", "world", "world");   
 
   timeInfo();
 }
