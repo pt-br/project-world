@@ -53,13 +53,41 @@ io.on('connection', function(socket) {
     checkProximity();
   });
 
-   socket.on('inspector_opened', function() {
+  socket.on('inspector_opened', function() {
     $botInfo = [];
     $botList.forEach(function(index, value) {
       $botInfo.push($botList[value].information);
     });
 
     socket.emit("draw_inspector", $botInfo);
+  });
+
+  socket.on('require_bot_info', function(botId) {
+  $singleBotDetails = [];
+  $totalBots = $botList.length;
+  $maxBotIndex = $totalBots -1;
+  for(var i = 0; i <= $maxBotIndex; i++) {
+    var $currentIndex = i;
+    var $currentBot = $botList[$currentIndex];
+    var $currentId = $currentBot.id;
+
+    if(botId == $currentId) {
+      var $botName = $currentBot.getName();
+      var $botLive = $currentBot.live;
+      var $botGender = $currentBot.gender;
+      var $botFace = $currentBot.face;
+      var $botFriends = $currentBot.friends;
+      var $botEnemies = $currentBot.enemies;
+      var $botParents = $currentBot.parents;
+      var $botKnowledge = $currentBot.knowledge;
+
+      $singleBotDetails.push($botName, $botLive, $botGender, $botFace, $botFriends, $botEnemies, $botParents, $botKnowledge);
+
+      socket.emit("send_bot_info", $singleBotDetails);
+
+    }
+
+  }
 
   });
 
