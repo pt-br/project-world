@@ -4,6 +4,7 @@
     <title>JS World</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script type="text/javascript" src="lib/jquery.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -11,5 +12,28 @@
 
   <body>
     <div class="computer"></div>
+    <div class="sideBar">
+      <div class="sideBarContainer">
+        <div class="sideBarTitle">Project World</div>
+        <ul class="menuList">
+          <li class="menuItem">
+            <i class="fa fa-question-circle fa-lg menuIcon"></i> 
+            <div class="menuText">What is it?</div>
+          </li>
+          <li class="menuItem">
+            <i class="fa fa-gear fa-lg menuIcon"></i> 
+            <div class="menuText">Features</div>
+          </li>
+          <li class="menuItem">
+            <i class="fa fa-user fa-lg menuIcon"></i> 
+            <div class="menuText">Bot Inspector</div>
+          </li>
+          <li class="menuItem">
+            <i class="fa fa-github fa-lg menuIcon"></i> 
+            <a href="https://github.com/pt-br/project-world" target="_blank" class="menuText">Source</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </body>
 </html>
