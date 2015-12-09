@@ -214,54 +214,54 @@ Bot.prototype.talk = function() {
         var $talkingNow = 1;
         var $chatInterval = setInterval(function() {
           if($this.enjoyingConversation > -3 && $this.enjoyingConversation < 3 && $talkingPartner.enjoyingConversation > -3 && $talkingPartner.enjoyingConversation < 3) {
-            // Keep talking
-            var $toSay = say();
-            
-            if($talkingNow == 1) {
+              // Keep default conversation
+              var $toSay = say();
+              
+              if($talkingNow == 1) {
 
-              // Clean the last phrase
-              io.emit("clear_last_phrase", $talkingPartner.id);
+                // Clean the last phrase
+                io.emit("clear_last_phrase", $talkingPartner.id);
 
-              console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": " + $toSay);
-              io.emit("talk", $this.id, "says to " + $talkingPartner.getName() + ": " + $toSay);
-              var $like = Math.floor(Math.random() * 2);
-              if($like == 0) {
-                // Didn't like 
-                console.warn("[ THINKING ] " + $talkingPartner.getName() + " thinks: Hmm... I didn't like this...");
-                io.emit("think", $talkingPartner.id, "Hmm... I didn't like this...");
-                $talkingPartner.enjoyingConversation--;
+                console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": " + $toSay);
+                io.emit("talk", $this.id, "says to " + $talkingPartner.getName() + ": " + $toSay);
+                var $like = Math.floor(Math.random() * 2);
+                if($like == 0) {
+                  // Didn't like 
+                  console.warn("[ THINKING ] " + $talkingPartner.getName() + " thinks: Hmm... I didn't like this...");
+                  io.emit("think", $talkingPartner.id, "Hmm... I didn't like this...");
+                  $talkingPartner.enjoyingConversation--;
+                } else {
+                  // Like
+                  console.log("[ THINKING ] " + $talkingPartner.getName() + " thinks: Wow! Interesting");
+                  io.emit("think", $talkingPartner.id, "Wow! Interesting");
+                  $talkingPartner.enjoyingConversation++;
+                }
+
+                $talkingNow = 2;
+
               } else {
-                // Like
-                console.log("[ THINKING ] " + $talkingPartner.getName() + " thinks: Wow! Interesting");
-                io.emit("think", $this.id, "Wow! Interesting");
-                $talkingPartner.enjoyingConversation++;
+
+                // Clean the last phrase
+                io.emit("clear_last_phrase", $this.id);
+
+                console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": " + $toSay);
+                io.emit("talk", $talkingPartner.id, "says to " + $this.getName() + ": " + $toSay);
+                var $like = Math.floor(Math.random() * 2);
+                if($like == 0) {
+                  // Didn't like 
+                  console.warn("[ THINKING ] " + $this.getName() + " thinks: Hmm... I didn't like this...");
+                  io.emit("think", $this.id, "Hmm... I didn't like this...");
+                  $this.enjoyingConversation--;
+                } else {
+                  // Like
+                  console.log("[ THINKING ] " + $this.getName() + " thinks: Wow! Interesting");
+                  io.emit("think", $this.id, "Wow! Interesting");
+                  $this.enjoyingConversation++;
+                }
+
+                $talkingNow = 1;
               }
-
-              $talkingNow = 2;
-
-            } else {
-
-              // Clean the last phrase
-              io.emit("clear_last_phrase", $this.id);
-
-              console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": " + $toSay);
-              io.emit("talk", $talkingPartner.id, "says to " + $this.getName() + ": " + $toSay);
-              var $like = Math.floor(Math.random() * 2);
-              if($like == 0) {
-                // Didn't like 
-                console.warn("[ THINKING ] " + $this.getName() + " thinks: Hmm... I didn't like this...");
-                io.emit("think", $this.id, "Hmm... I didn't like this...");
-                $this.enjoyingConversation--;
-              } else {
-                // Like
-                console.log("[ THINKING ] " + $this.getName() + " thinks: Wow! Interesting");
-                io.emit("think", $this.id, "Wow! Interesting");
-                $this.enjoyingConversation++;
-              }
-
-              $talkingNow = 1;
-            }
-            $nextPhraseTime = Math.floor((Math.random() * 10000) + 5000);
+              $nextPhraseTime = Math.floor((Math.random() * 10000) + 5000);
           } else {
             // Stop the talking
             clearInterval($chatInterval);
@@ -274,10 +274,30 @@ Bot.prototype.talk = function() {
               if($relationShip == "none") {
                 $this.friends.push($talkingPartner);
                 $talkingPartner.friends.push($this);
+
+                var $knowledgeSize = $this.knowledge.length;
+
+                if($knowledgeSize > 0) {
+                  // Start knowledge conversation
+                  $this.busy = true;
+                  $talkingPartner.busy = true;
+                  $this.talkAboutKnowledge($talkingPartner);
+                } 
+
                 console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
                 io.emit("talk", $this.id, "says to " + $talkingPartner.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
               }
               else if($relationShip == "friend") {
+
+                var $knowledgeSize = $this.knowledge.length;
+
+                if($knowledgeSize > 0) {
+                  // Start knowledge conversation
+                  $this.busy = true;
+                  $talkingPartner.busy = true;
+                  $this.talkAboutKnowledge($talkingPartner);
+                }
+
                 console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": It's always good to talk with you, my friend! Goodbye");
                 io.emit("talk", $this.id, "says to " + $talkingPartner.getName() + ": It's always good to talk with you, my friend! Goodbye");
               }
@@ -304,10 +324,30 @@ Bot.prototype.talk = function() {
               if($relationShip == "none") {
                 $talkingPartner.friends.push($this);
                 $this.friends.push($talkingPartner);
+
+                var $knowledgeSize = $this.knowledge.length;
+
+                if($knowledgeSize > 0) {
+                  // Start knowledge conversation
+                  $this.busy = true;
+                  $talkingPartner.busy = true;
+                  $this.talkAboutKnowledge($talkingPartner);
+                }
+
                 console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
                 io.emit("talk", $talkingPartner.id, "says to " + $this.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
               }
               else if($relationShip == "friend") {
+
+                var $knowledgeSize = $this.knowledge.length;
+
+                if($knowledgeSize > 0) {
+                  // Start knowledge conversation
+                  $this.busy = true;
+                  $talkingPartner.busy = true;
+                  $this.talkAboutKnowledge($talkingPartner);
+                }
+
                 console.log("[ CONVERSATION ] " + $talkingPartner.getName() + " says to " + $this.getName() + ": It's always good to talk with you, my friend! Goodbye");
                 io.emit("talk", $talkingPartner.id, "says to " + $this.getName() + ": It's always good to talk with you, my friend! Goodbye");
               }
@@ -614,6 +654,175 @@ Bot.prototype.die = function() {
   $this.information[2] = "/images/rip.png";
   $this.information.push("dead");
   io.emit("bot_death", $this.id);
+}
+
+Bot.prototype.talkAboutKnowledge = function($botPartner) {
+  var $this = this;
+  var $botPartner = $botPartner;
+
+  console.log("[ THINKING ] " + $this.getName() + " thinks: Hm...");
+  io.emit("think", $this.id, "Hm...");
+
+  console.log("[ THINKING ] " + $botPartner.getName() + " thinks: Hm...");
+  io.emit("think", $botPartner.id, "Hm...");
+
+  console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": I want to share something with you!");
+  io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": I want to share something with you!");
+
+  setTimeout(function() {
+    
+    io.emit("clear_last_phrase", $this.id);
+    console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Oh, that's nice! Knowledge sharing is awesome!");
+    io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Oh, that's nice! I want to learn something that you know :)");
+
+    setTimeout(function() {
+
+      // Sort some knowledge
+      var maxSize = $this.knowledge.length;
+      var sortedIndex = Math.floor((Math.random() * maxSize) + 0);
+      var knowledgeName = $this.knowledge[sortedIndex][0];
+      var knowledgeContent = $this.knowledge[sortedIndex][1];
+
+      io.emit("clear_last_phrase", $botPartner.id);
+      console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": Do you know something about " + knowledgeName + " ?");
+      io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": Do you know something about " + knowledgeName + " ?");
+
+      setTimeout(function() {
+
+        // Verify if partner knows about the subject
+
+        var partnerKnows = false;
+
+        $botPartner.knowledge.forEach(function(index, value) {
+          partnerKnowledgeName = $botPartner.knowledge[value][0];
+          partnerKnowledgeContent = $botPartner.knowledge[value][1];
+
+          // Partner knows
+          if (partnerKnowledgeName == knowledgeName) {
+            partnerKnows = true;
+          }
+
+        });
+
+        // Partner knows
+        if (partnerKnows) {
+
+          setTimeout(function() {
+
+            io.emit("clear_last_phrase", $this.id);
+            console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Of course! I know everything about " + partnerKnowledgeName);
+            io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Of course! I know everything about " + partnerKnowledgeName);
+
+            setTimeout(function() {
+
+              io.emit("clear_last_phrase", $botPartner.id);
+              console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": So, do you really know that " + knowledgeContent + "?");
+              io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": So, do you really know that " + knowledgeContent + "?");
+
+              setTimeout(function() {
+
+                io.emit("clear_last_phrase", $this.id);
+                console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Yes, I do! And it's nice to know that you knows as far as I :)");
+                io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Yes, I do! And it's nice to know that you knows as far as I :)");
+
+                setTimeout(function() {
+
+                  io.emit("clear_last_phrase", $botPartner.id);
+                  console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": Okay! It was nice running into you, but I do have to go now...");
+                  io.emit("talk", $this.id, "says to " + $botPartner.getName() + ":  Okay! It was nice running into you, but I do have to go now...");
+
+                  setTimeout(function() {
+
+                    io.emit("clear_last_phrase", $this.id);
+                    console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Sure! Goodbye");
+                    io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Sure! Goodbye");
+
+                    var $relationShip = checkRelationship($this, $botPartner);
+                    
+                    if($relationShip == "none") {
+                      $this.friends.push($botPartner);
+                      $botPartner.friends.push($this);
+                    }
+
+                    setTimeout(function() {
+                      // End conversation
+                      io.emit("end_talk", $this.id, $botPartner.id);
+                      $this.busy = false;
+                      $botPartner.busy = false;
+
+                    }, 6000);
+
+                  }, 6000);
+
+                }, 6000);
+
+              }, 6000);
+
+            }, 6000);
+
+          }, 6000);
+
+        } else { // Partner don't know
+          
+          setTimeout(function() {
+
+            io.emit("clear_last_phrase", $this.id);
+            console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Oh, I don't know anything about " + knowledgeName + ", can you teach me?");
+            io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Oh, I don't know anything about " + knowledgeName + ", can you teach me?");
+
+            setTimeout(function() {
+
+              io.emit("clear_last_phrase", $botPartner.id);
+              console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": For Sure! " + knowledgeContent);
+              io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": For Sure! " + knowledgeContent);
+
+              setTimeout(function() {
+
+                io.emit("clear_last_phrase", $this.id);
+                console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Wow! Now I know everything about " + knowledgeName + ". Thank you!");
+                io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Wow! Now I know everything about " + knowledgeName + ". Thank you!");
+
+                setTimeout(function() {
+
+                  io.emit("clear_last_phrase", $botPartner.id);
+                  console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": You're welcome! Cya :)");
+                  io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": You're welcome! Cya :)");
+
+                  var $relationShip = checkRelationship($this, $botPartner);
+                    
+                  if($relationShip == "none") {
+                    $this.friends.push($botPartner);
+                    $botPartner.friends.push($this);
+                  }
+
+                  setTimeout(function() {
+                    // End conversation
+
+                    $botPartner.knowledge.push([knowledgeName, knowledgeContent]);
+
+                    io.emit("end_talk", $this.id, $botPartner.id);
+                    $this.busy = false;
+                    $botPartner.busy = false;
+
+                  }, 6000);
+
+                }, 6000);
+
+              }, 12000);
+
+            }, 6000);
+
+          }, 6000);
+        }
+
+      });
+
+
+    }, 6000);
+  
+  }, 6000);
+
+
 }
 
 Bot.prototype.learn = function() {
