@@ -113,7 +113,8 @@ body {
 
 .featureItem {
   margin-bottom: 10px;
-  background: #8C8C8E;
+  background: #E8E8E8;
+  color: #737171;
   padding: 10px;
   border-radius: 20px;
 }
