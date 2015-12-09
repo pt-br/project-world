@@ -85,6 +85,25 @@ $(function() {
         }
       });
 
+      // Change the navigation content 
+      $(".menuItem").click(function() {
+        var menuItem = $(this);
+        var toActiveClass = menuItem.attr("data-bar");
+        var currentActive = $(".sideBarType.active");
+
+        currentActive.css("opacity", 0);
+        setTimeout(function() {
+          currentActive.removeClass("active");
+          currentActive.addClass("inactive");
+          var newActive = $(".sideBarType." + toActiveClass);
+          newActive.removeClass("inactive");
+          newActive.addClass("active");
+          newActive.css("opacity", 1);
+        }, 500); 
+
+      });
+
+
     });
 
   /// DOM FUNCTIONS END ///

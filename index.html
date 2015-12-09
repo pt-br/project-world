@@ -18,24 +18,101 @@
       </div>
       <div class="sideBarContainer">
         <div class="sideBarTitle">Project World</div>
-        <ul class="menuList">
-          <li class="menuItem">
-            <i class="fa fa-question-circle fa-lg menuIcon"></i> 
-            <div class="menuText">What is it?</div>
-          </li>
-          <li class="menuItem">
-            <i class="fa fa-cogs fa-lg menuIcon"></i> 
-            <div class="menuText">Features</div>
-          </li>
-          <li class="menuItem">
-            <i class="fa fa-user fa-lg menuIcon"></i> 
-            <div class="menuText">Bot Inspector</div>
-          </li>
-          <li class="menuItem">
-            <i class="fa fa-github fa-lg menuIcon"></i> 
-            <a href="https://github.com/pt-br/project-world" target="_blank" class="menuText">Source</a>
-          </li>
-        </ul>
+        <div class="sideBarHome sideBarType inactive">
+          <ul class="menuList">
+            <li class="menuItem" data-bar="sideBarWhatIsIt">
+              <i class="fa fa-question-circle fa-lg menuIcon"></i> 
+              <div class="menuText">What is it?</div>
+            </li>
+            <li class="menuItem" data-bar="sideBarFeatures">
+              <i class="fa fa-cogs fa-lg menuIcon"></i> 
+              <div class="menuText">Features</div>
+            </li>
+            <li class="menuItem" data-bar="sideBarInspector">
+              <i class="fa fa-user fa-lg menuIcon"></i> 
+              <div class="menuText">Bot Inspector</div>
+            </li>
+            <li class="menuItem">
+              <i class="fa fa-github fa-lg menuIcon"></i> 
+              <a href="https://github.com/pt-br/project-world" target="_blank" class="menuText">Source</a>
+            </li>
+          </ul>
+        </div>
+        <div class="sideBarWhatIsIt sideBarType inactive">
+          <ul class="menuList">
+            <li class="menuItem" data-bar="sideBarHome">
+              <i class="fa fa-chevron-circle-left fa-lg menuIcon"></i> 
+              <div class="menuText">Back</div>
+            </li>
+          </ul>
+          <div class="sectionTitle">What is it?</div>
+          <div class="sectionContent">
+            <p>Project world is a world created for a new type of life: Bots.</p>
+            <p>Using Node.js and JavaScript, we are building A.I. that can live, die, 
+            talk, learn, teach and much more things.</p>
+          </div>
+        </div>
+        <div class="sideBarFeatures sideBarType active">
+          <ul class="menuList">
+            <li class="menuItem" data-bar="sideBarHome">
+              <i class="fa fa-chevron-circle-left fa-lg menuIcon"></i> 
+              <div class="menuText">Back</div>
+            </li>
+          </ul>
+          <div class="sectionTitle">Features</div>
+          <div class="sectionContent">
+            <ul class="featuresList">
+            <li class="featureItem">
+              <i class="fa fa-heartbeat fa-lg featureIcon"></i> 
+              <div class="featureText">Live</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-battery-quarter fa-lg featureIcon"></i> 
+              <div class="featureText">Die</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-hourglass-half fa-lg featureIcon"></i> 
+              <div class="featureText">Think</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-wechat fa-lg featureIcon"></i> 
+              <div class="featureText">Talk</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-cloud-download fa-lg featureIcon"></i> 
+              <div class="featureText">Learn</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-share-alt-square fa-lg featureIcon"></i> 
+              <div class="featureText">Teach</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-smile-o fa-lg featureIcon"></i> 
+              <div class="featureText">Make friends</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-frown-o fa-lg featureIcon"></i> 
+              <div class="featureText">Make Enemies</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-flash fa-lg featureIcon"></i> 
+              <div class="featureText">Fight</div>
+            </li>
+            <li class="featureItem">
+              <i class="fa fa-child fa-lg featureIcon"></i> 
+              <div class="featureText">Have a Baby</div>
+            </li>
+          </ul>
+          </div>
+        </div>
+        <div class="sideBarInspector sideBarType inactive">
+          <ul class="menuList">
+            <li class="menuItem" data-bar="sideBarHome">
+              <i class="fa fa-chevron-circle-left fa-lg menuIcon"></i> 
+              <div class="menuText">Back</div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </body>
