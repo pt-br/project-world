@@ -137,6 +137,11 @@ $(function() {
         }
       });
 
+      // Clicking on github's icon should open the repository too
+      $(".fa-github").click(function() {
+        window.open("https://github.com/pt-br/project-world","_blank");
+      });
+
     });
 
   /// DOM FUNCTIONS END ///
