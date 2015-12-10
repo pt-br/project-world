@@ -34,9 +34,9 @@ $(function() {
           }
 
           var menuItem = $(this);
-          var toActiveClass = "sideBarInspector";
+          var toActiveClass = "sideBarInspecting";
           var currentActive = $(".sideBarType.active");
-          if(!currentActive.hasClass("sideBarInspecting")) {
+          if(!currentActive.hasClass(toActiveClass)) {
             currentActive.css("opacity", 0);
             setTimeout(function() {
               currentActive.removeClass("active");
