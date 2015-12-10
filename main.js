@@ -640,6 +640,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
             io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": You are right. Let's be friends.");
 
             removeEnemy($this, $botPartner.getName());
+            removeEnemy($botPartner, $this.getName());
 
             $this.friends.push($botPartner.getName());
             $botPartner.friends.push($this.getName());
