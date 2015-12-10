@@ -35,7 +35,7 @@ body {
   position: absolute;
   background-color: rgba(156, 156, 156, 0.76);
   top: 0;
-  right: -300px;
+  right: 0;
   -webkit-transition: right 0.5s;
   transition: right 0.5s;
   z-index: 30;
