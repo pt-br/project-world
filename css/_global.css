@@ -312,6 +312,7 @@ body {
   position: relative;
   border-radius: 30px;
   border: 2px solid #A58D7F;
+  cursor: pointer;
 }
 
 .bot:after {

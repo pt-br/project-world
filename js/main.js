@@ -23,6 +23,34 @@ $(function() {
 
         drawInspector($botInfo);
 
+        // Inspect a bot by clicking on it
+        $(".bot").click(function() {
+          var $bot = $(this);
+          var $botId = $bot.attr("id");
+
+          var barButton = $(".sideBarButton");
+          if(barButton.hasClass("barClosed")) {
+            barButton.click();
+          }
+
+          var menuItem = $(this);
+          var toActiveClass = "sideBarInspector";
+          var currentActive = $(".sideBarType.active");
+          if(!currentActive.hasClass("sideBarInspecting")) {
+            currentActive.css("opacity", 0);
+            setTimeout(function() {
+              currentActive.removeClass("active");
+              currentActive.addClass("inactive");
+              var newActive = $(".sideBarType." + toActiveClass);
+              newActive.removeClass("inactive");
+              newActive.addClass("active");
+              newActive.css("opacity", 1);
+            }, 500); 
+          }
+
+          socket.emit("require_bot_info", $botId);
+        });
+
       });
 
       socket.on("walk", function(top, left, botId) {
