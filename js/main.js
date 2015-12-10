@@ -137,8 +137,8 @@ $(function() {
         }
       });
 
-      // Clicking on github's icon should open the repository too
-      $(".fa-github").click(function() {
+      // Clicking on github's icon/link container should open the repository too
+      $(".fa-github, .sourceLink").click(function() {
         window.open("https://github.com/pt-br/project-world","_blank");
       });
 
