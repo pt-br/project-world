@@ -237,6 +237,7 @@ body {
   position: relative;
   padding: 0px;
   margin-top: 0;
+  cursor: pointer;
 }
 
 .inspectingBotArray {
