@@ -278,6 +278,17 @@ $(function() {
   }
 
   function startBotInspector($botInfoComplete) {
+
+    // Reset togglers
+    var togglers = $(".inspectingBotArray");
+
+    togglers.find(".inspectingIcon")
+      .removeClass("open");
+
+    togglers.find(".inspectingContent")
+      .removeClass("active")
+      .addClass("inactive");
+
     var sideBarInspector = $(".sideBarInspector");
     sideBarInspector.css("opacity", 0);
     setTimeout(function() {
