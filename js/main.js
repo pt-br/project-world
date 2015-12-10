@@ -2,6 +2,7 @@ $(function() {
 
   /// GLOBAL VARS BEGIN ///
 
+  var $botInspector = [];
 
   /// GLOBAL VARS END ///
 
@@ -60,8 +61,10 @@ $(function() {
         drawInspector(botInfo);
       });
 
-      socket.on("send_bot_info", function(singleBotDetails) {
-        console.log(singleBotDetails);
+      socket.on("send_bot_info_complete", function(botComplete) {
+        $botInspector = [];
+        $botInspector = botComplete;
+        startBotInspector($botInspector);
       });
 
       // Menu functions
@@ -116,6 +119,24 @@ $(function() {
           }
         }, 500); 
       });
+
+      // Controlling togglers
+      $(".inspectingBotArray").click(function() {
+        var li = $(this);
+        var content = li.find(".inspectingContent");
+        var icon = li.find(".inspectingIcon");
+
+        if(content.hasClass("inactive")) {
+          content.removeClass("inactive");
+          content.addClass("active");
+          icon.addClass("open");
+        } else {
+            icon.removeClass("open");
+            content.removeClass("active");
+            content.addClass("inactive");
+        }
+      });
+
     });
 
   /// DOM FUNCTIONS END ///
@@ -219,7 +240,6 @@ $(function() {
   }
 
   function drawInspector($botInfo) {
-
     jQuery(".inspectBotListContainer").html("");
 
     $totalBots = $botInfo.length;
@@ -250,7 +270,106 @@ $(function() {
       var $botId = $bot.attr("data-bot-id");
       socket.emit("require_bot_info", $botId);
     });
+  }
 
+  function startBotInspector($botInfoComplete) {
+    var sideBarInspector = $(".sideBarInspector");
+    sideBarInspector.css("opacity", 0);
+    setTimeout(function() {
+      sideBarInspector.removeClass("active");
+      sideBarInspector.addClass("inactive");
+      var newActive = $(".sideBarInspecting");
+      newActive.removeClass("inactive");
+      newActive.addClass("active");
+      newActive.css("opacity", 1);
+    }, 500); 
+
+    var $botName = $botInfoComplete[0];
+    var $botGender = $botInfoComplete[1];
+    var $botFace = $botInfoComplete[2];
+    var $botStatus = $botInfoComplete[3];
+    var $botFriends = $botInfoComplete[4].slice(0);
+    var $botEnemies = $botInfoComplete[5].slice(0);
+    var $botParents = $botInfoComplete[6].slice(0);
+    var $botKnowledge = $botInfoComplete[7].slice(0);
+
+    var inspectingContainer = $(".inspectingBotContainer");
+
+    inspectingContainer.find(".inspectingBotPhoto").css("background-image", "url(" + $botFace + ")");
+    inspectingContainer.find(".inspectingBotName").text($botName);
+
+    
+    if($botGender == "male") {
+      inspectingContainer.find(".inspectingBotGender")
+        .text($botGender)
+        .attr("data-gender", "male");
+    } else {
+      inspectingContainer.find(".inspectingBotGender")
+        .text($botGender)
+        .attr("data-gender", "female");
+    }
+
+    if($botStatus) {
+      inspectingContainer.find(".inspectingBotStatus")
+        .text("Live")
+        .attr("data-status", "live");
+    } else {
+      inspectingContainer.find(".inspectingBotStatus")
+        .text("Dead")
+        .attr("data-status", "dead");
+    }
+
+    // Clean togglers
+    $(".inspectingContent").html("");
+
+    // Fill togglers
+    // Friends
+    var totalItems = $botFriends.length;
+    if(totalItems == 0) {
+      $(".friendsContent").append("<div class='inspectItem'>Has no friends</div>");
+    } else {
+      maxIndex = totalItems -1;
+      for(var i = 0; i <= maxIndex; i++) {
+        var currentIndex = i;
+        var currentItem = $botFriends[i];
+        $(".friendsContent").append("<div class='inspectItem'>" + currentItem +"</div>");
+      }
+    }
+
+    // Enemies
+    var totalItems = $botEnemies.length;
+    if(totalItems == 0) {
+      $(".enemiesContent").append("<div class='inspectItem'>Has no enemies</div>");
+    } else {
+      maxIndex = totalItems -1;
+      for(var i = 0; i <= maxIndex; i++) {
+        var currentIndex = i;
+        var currentItem = $botEnemies[i];
+        $(".enemiesContent").append("<div class='inspectItem'>" + currentItem +"</div>");
+      }
+    }
+
+    // Parents
+    var totalItems = $botParents.length; 
+    maxIndex = totalItems -1;
+    for(var i = 0; i <= maxIndex; i++) {
+      var currentIndex = i;
+      var currentItem = $botParents[i];
+      $(".parentsContent").append("<div class='inspectItem'>" + currentItem +"</div>");
+    }
+
+    // Knowledge
+    var totalItems = $botKnowledge.length; 
+    if(totalItems == 0) {
+      $(".knowledgeContent").append("<div class='inspectItem'>Has no knowledge</div>");
+    } else {
+      maxIndex = totalItems -1;
+      for(var i = 0; i <= maxIndex; i++) {
+        var currentIndex = i;
+        var currentItem = $botKnowledge[i];
+        $(".knowledgeContent").append("<div class='inspectItem'>" + currentItem[0] +"</div>");
+      }
+    }
   }
 
 });

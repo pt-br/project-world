@@ -18,7 +18,7 @@
       </div>
       <div class="sideBarContainer">
         <div class="sideBarTitle">Project World</div>
-        <div class="sideBarHome sideBarType inactive">
+        <div class="sideBarHome sideBarType active">
           <ul class="menuList">
             <li class="menuItem" data-bar="sideBarWhatIsIt">
               <i class="fa fa-question-circle fa-lg menuIcon"></i> 
@@ -32,7 +32,7 @@
               <i class="fa fa-user fa-lg menuIcon"></i> 
               <div class="menuText">Bot Inspector</div>
             </li>
-            <li class="menuItem">
+            <li class="menuItem" data-bar="sideBarHome">
               <i class="fa fa-github fa-lg menuIcon"></i> 
               <a href="https://github.com/pt-br/project-world" target="_blank" class="menuText">Source</a>
             </li>
@@ -102,10 +102,14 @@
               <i class="fa fa-child fa-lg featureIcon"></i> 
               <div class="featureText">Have a Baby</div>
             </li>
+            <li class="featureItem">
+              <i class="fa fa-street-view fa-lg featureIcon"></i> 
+              <div class="featureText">Proximity Detection</div>
+            </li>
           </ul>
           </div>
         </div>
-        <div class="sideBarInspector sideBarType active">
+        <div class="sideBarInspector sideBarType inactive">
           <ul class="menuList">
             <li class="menuItem" data-bar="sideBarHome">
               <i class="fa fa-chevron-circle-left fa-lg menuIcon"></i> 
@@ -116,6 +120,53 @@
           <div class="sectionContent">
             <p>Select a Bot to inspect</p>
             <div class="inspectBotListContainer">
+            </div>
+          </div>
+        </div>
+        <div class="sideBarInspecting sideBarType inactive">
+          <ul class="menuList">
+            <li class="menuItem" data-bar="sideBarInspector">
+              <i class="fa fa-chevron-circle-left fa-lg menuIcon"></i> 
+              <div class="menuText">Back</div>
+            </li>
+          </ul>
+          <div class="sectionTitle">Bot Inspector</div>
+          <div class="sectionContent">
+            <div class="inspectingBotContainer">
+              <div class="inspectingBotPhoto"></div>
+              <div class="inspectingBotName"></div>
+              <div class="inspectingBotGender" data-gender></div>
+              <div class="inspectingBotStatus" data-status></div>
+              <ul class="inspectingBotArrays">
+                <li class="inspectingBotArray inspectingFriends">
+                  <i class="fa fa-chevron-circle-down fa-lg inspectingIcon"></i> 
+                  <div class="inspectingText">Friends</div>
+                  <div class="inspectingContent friendsContent inactive">
+
+                  </div>
+                </li>
+                <li class="inspectingBotArray inspectingEnemies">
+                  <i class="fa fa-chevron-circle-down fa-lg inspectingIcon"></i> 
+                  <div class="inspectingText">Enemies</div>
+                  <div class="inspectingContent enemiesContent inactive">
+                    
+                  </div>
+                </li>
+                <li class="inspectingBotArray inspectingParents">
+                  <i class="fa fa-chevron-circle-down fa-lg inspectingIcon"></i> 
+                  <div class="inspectingText">Parents</div>
+                  <div class="inspectingContent parentsContent inactive">
+                    
+                  </div>
+                </li>
+                <li class="inspectingBotArray inspectingKnowledge">
+                  <i class="fa fa-chevron-circle-down fa-lg inspectingIcon"></i> 
+                  <div class="inspectingText">Knowledge</div>
+                  <div class="inspectingContent knowledgeContent inactive">
+                    
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

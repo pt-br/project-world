@@ -110,6 +110,8 @@ body {
 
 .featuresList {
   padding: 0;
+  height: 500px;
+  overflow-y: scroll;
 }
 
 .featureItem {
@@ -118,6 +120,7 @@ body {
   color: #737171;
   padding: 10px;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .featureText {
@@ -170,6 +173,110 @@ body {
   top: 15px;
   left: 10px;
   color: #737171;
+}
+
+.inspectingBotContainer {
+  background: #E8E8E8;
+  border-radius: 10px;
+  height: 400px;
+  padding: 10px;
+  margin-top: 20px;
+  display: block;
+  overflow-y: scroll;
+}
+
+.inspectingBotPhoto {
+  background: red;
+  background-size: contain;
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  border-radius: 50px;
+  border: 2px solid #565454;
+}
+
+.inspectingBotName {
+  padding: 10px;
+  text-align: center;
+  font-size: 20px;
+  text-transform: capitalize;
+  color: #737171;
+}
+
+.inspectingBotGender {
+  text-align: center;
+  color: #5AD620;
+  text-transform: capitalize;
+}
+
+.inspectingBotGender[data-gender="male"] {
+  color: #448AD8;
+}
+
+.inspectingBotGender[data-gender="female"] {
+  color: rgb(229, 66, 147);
+}
+
+.inspectingBotStatus {
+  text-align: center;
+  color: #B10000;
+  text-transform: capitalize;
+}
+
+.inspectingBotStatus[data-status="live"] {
+  color: #3FA70C;
+}
+
+.inspectingBotStatus[data-status="dead"] {
+  color: #E80054;
+}
+
+.inspectingBotArrays {
+  list-style: none;
+  display: block;
+  position: relative;
+  padding: 0px;
+  margin-top: 0;
+}
+
+.inspectingBotArray {
+  padding: 10px;
+  background: #D6D6D6;
+  margin-top: 10px;
+  color: #737171;
+}
+
+.inspectingIcon {
+  float: right;
+  transform: rotate(0deg);
+  -webkit-transition: transform 0.5s;
+  transition: transform 0.5s;
+}
+
+.inspectingIcon.open {
+  transform: rotate(180deg);
+}
+
+.inspectingText {
+  display: block;
+  top: -2px;
+  position: relative;
+}
+
+.inspectingContent {
+  height: auto;
+  display: block;
+}
+
+.inspectingContent.inactive {
+  height: 0;
+  display: none;
+}
+
+.inspectItem {
+  padding: 5px 10px;
+  color: #4A4949;
+  text-transform: capitalize;
 }
 
 .computer {
