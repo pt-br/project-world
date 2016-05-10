@@ -25,7 +25,7 @@ wiki = new Wiki();
 //   console.log(title[0]);
 //   wiki.page(randomTitle).then(function(page) {
 //     page.summary().then(function(content) {
-//       console.log(content); 
+//       console.log(content);
 //     });
 //   });
 // });
@@ -43,7 +43,7 @@ io.on('connection', function(socket) {
   });
 
   socket.emit("load_world", $botInfo, $$world.dayTimeClass);
-  
+
   socket.on('walk', function(top, left) {
     //console.log("top: " + top);
     //console.log("left: " + left);
@@ -80,10 +80,10 @@ io.on('connection', function(socket) {
         var $botEnemies = $currentBot.enemies.slice(0);
         var $botParents = $currentBot.parents.slice(0);
         var $botKnowledge = $currentBot.knowledge.slice(0);
-        
+
         var $botComplete = [$botName, $botGender, $botFace, $botLive, $botFriends, $botEnemies, $botParents, $botKnowledge];
 
-        socket.emit("send_bot_info_complete", $botComplete);      
+        socket.emit("send_bot_info_complete", $botComplete);
       }
     }
   });
@@ -130,7 +130,7 @@ function Bot($botName, $gender, $parent1, $parent2) {
   request('http://api.randomuser.me/?gender='+$gender, function (error, response, data) {
   if (!error && response.statusCode == 200) {
       jsonObject = JSON.parse(data);
-      $this.face = jsonObject.results[0].user.picture.thumbnail;
+      $this.face = jsonObject.results[0].picture.thumbnail;
       $this.information = [$this.name, $this.gender, $this.face, $this.top, $this.left, $this.id];
     }
   });
@@ -209,11 +209,11 @@ Bot.prototype.walk = function() {
 
   var $worldHeight = 15;
   var $worldWidth = 600;
-  
+
   var $moveHeigth = Math.floor(Math.random() * $worldHeight);
   var $moveWidth = Math.floor(Math.random() * $worldWidth);
-  
-  var $newPosition = [$moveHeigth, $moveWidth]; 
+
+  var $newPosition = [$moveHeigth, $moveWidth];
 
   // Save the cordinates in the bot's object
   $this.top = $moveHeigth;
@@ -223,7 +223,7 @@ Bot.prototype.walk = function() {
   $this.information[3] = $this.top;
   $this.information[4] = $this.left;
 
-  io.emit('walk', $moveHeigth, $moveWidth, $this.id); 
+  io.emit('walk', $moveHeigth, $moveWidth, $this.id);
 }
 Bot.prototype.talk = function() {
   var $this = this;
@@ -236,7 +236,7 @@ Bot.prototype.talk = function() {
     // Choose one of the next elements to talk to
     var $choosenBotId = Math.floor(Math.random() * $nextMax);
     var $talkingPartner = $this.nextTo[$choosenBotId];
-    
+
     if(!$talkingPartner.busy) {
       // Partner is not busy
       var $relationShip = checkRelationship($this, $talkingPartner.getName());
@@ -251,7 +251,7 @@ Bot.prototype.talk = function() {
           if($this.enjoyingConversation > -3 && $this.enjoyingConversation < 3 && $talkingPartner.enjoyingConversation > -3 && $talkingPartner.enjoyingConversation < 3) {
               // Keep default conversation
               var $toSay = say();
-              
+
               if($talkingNow == 1) {
 
                 // Clean the last phrase
@@ -261,7 +261,7 @@ Bot.prototype.talk = function() {
                 io.emit("talk", $this.id, "says to " + $talkingPartner.getName() + ": " + $toSay);
                 var $like = Math.floor(Math.random() * 2);
                 if($like == 0) {
-                  // Didn't like 
+                  // Didn't like
                   console.warn("[ THINKING ] " + $talkingPartner.getName() + " thinks: Hmm... I didn't like this...");
                   io.emit("think", $talkingPartner.id, "Hmm... I didn't like this...");
                   $talkingPartner.enjoyingConversation--;
@@ -283,7 +283,7 @@ Bot.prototype.talk = function() {
                 io.emit("talk", $talkingPartner.id, "says to " + $this.getName() + ": " + $toSay);
                 var $like = Math.floor(Math.random() * 2);
                 if($like == 0) {
-                  // Didn't like 
+                  // Didn't like
                   console.warn("[ THINKING ] " + $this.getName() + " thinks: Hmm... I didn't like this...");
                   io.emit("think", $this.id, "Hmm... I didn't like this...");
                   $this.enjoyingConversation--;
@@ -317,7 +317,7 @@ Bot.prototype.talk = function() {
                   $this.busy = true;
                   $talkingPartner.busy = true;
                   $this.talkAboutKnowledge($talkingPartner);
-                } 
+                }
 
                 console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $talkingPartner.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
                 io.emit("talk", $this.id, "says to " + $talkingPartner.getName() + ": I really liked to talk to you, consider yourself my friend! Goodbye");
@@ -412,10 +412,10 @@ Bot.prototype.talk = function() {
             setTimeout(function() {
               io.emit("end_talk", $this.id, $talkingPartner.id);
             }, 6000);
-            
+
           }
         }, $nextPhraseTime);
-      } 
+      }
       else if ($relationShip == "enemy") {
         console.error("[ THINKING ] " + $this.getName() + " thinks: I don't wanna talk to " + $talkingPartner.getName() + "!");
         io.emit("think", $this.id, "I don't wanna talk to " + $talkingPartner.getName() + "!");
@@ -468,7 +468,7 @@ Bot.prototype.haveBaby = function() {
 
           console.log("[ CONVERSATION ] " + $this.getName() + " says to " + $botPartner.getName() + ": Look... We are friends for a long time... Don't you think that we can create a baby? :)");
           io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": Look... We are friends for a long time... Don't you think that we can create a baby? :)");
-        
+
           setTimeout(function() {
             var $decision1 = Math.floor((Math.random() * 6) + 1);
 
@@ -530,7 +530,7 @@ Bot.prototype.haveBaby = function() {
               }, 5000);
             }
           }, 3000);
-        } 
+        }
         else {
           // Partner is not friend
           console.log("[ THINKING ] " + $this.getName() + " thinks: I would ask "+ $botPartner.getName() + " for a baby, but we are not friends :(");
@@ -604,7 +604,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
               io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Oh fuck! What I've done?!");
 
               $this.die();
-              
+
               setTimeout(function() {
                 // End fight
                 io.emit("clear_last_phrase", $this.id);
@@ -621,7 +621,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
               io.emit("talk", $botPartner.id, "says: X.X");
 
               $botPartner.die();
-              
+
               setTimeout(function() {
                 // End fight
                 io.emit("clear_last_phrase", $this.id);
@@ -644,7 +644,7 @@ Bot.prototype.fight = function($bot, $botPartner) {
 
             $this.friends.push($botPartner.getName());
             $botPartner.friends.push($this.getName());
-            
+
             setTimeout(function() {
               // End fight
               io.emit("end_talk", $this.id, $botPartner.id);
@@ -706,7 +706,7 @@ Bot.prototype.talkAboutKnowledge = function($botPartner) {
   io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": I want to share something with you!");
 
   setTimeout(function() {
-    
+
     io.emit("clear_last_phrase", $this.id);
     console.log("[ CONVERSATION ] " + $botPartner.getName() + " says to " + $this.getName() + ": Oh, that's nice! Knowledge sharing is awesome!");
     io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Oh, that's nice! I want to learn something that you know :)");
@@ -774,7 +774,7 @@ Bot.prototype.talkAboutKnowledge = function($botPartner) {
                     io.emit("talk", $botPartner.id, "says to " + $this.getName() + ": Sure! Goodbye");
 
                     var $relationShip = checkRelationship($this, $botPartner.getName());
-                    
+
                     if($relationShip == "none") {
                       $this.friends.push($botPartner.getName());
                       $botPartner.friends.push($this.getName());
@@ -799,7 +799,7 @@ Bot.prototype.talkAboutKnowledge = function($botPartner) {
           }, 6000);
 
         } else { // Partner don't know
-          
+
           setTimeout(function() {
 
             io.emit("clear_last_phrase", $this.id);
@@ -825,7 +825,7 @@ Bot.prototype.talkAboutKnowledge = function($botPartner) {
                   io.emit("talk", $this.id, "says to " + $botPartner.getName() + ": You're welcome! Cya :)");
 
                   var $relationShip = checkRelationship($this, $botPartner.getName());
-                    
+
                   if($relationShip == "none") {
                     $this.friends.push($botPartner.getName());
                     $botPartner.friends.push($this.getName());
@@ -855,7 +855,7 @@ Bot.prototype.talkAboutKnowledge = function($botPartner) {
 
 
     }, 6000);
-  
+
   }, 6000);
 
 
@@ -900,11 +900,11 @@ Bot.prototype.learn = function() {
 
           var $worldHeight = 15;
           var $worldWidth = 600;
-          
+
           var $moveHeigth = Math.floor(Math.random() * $worldHeight);
           var $moveWidth = Math.floor(Math.random() * $worldWidth);
-          
-          var $newPosition = [$moveHeigth, $moveWidth]; 
+
+          var $newPosition = [$moveHeigth, $moveWidth];
 
           // Save the cordinates in the bot's object
           $this.top = $moveHeigth;
@@ -914,7 +914,7 @@ Bot.prototype.learn = function() {
           $this.information[3] = $this.top;
           $this.information[4] = $this.left;
 
-          io.emit('walk', $moveHeigth, $moveWidth, $this.id); 
+          io.emit('walk', $moveHeigth, $moveWidth, $this.id);
 
           setTimeout(function() {
             $this.busy = false;
@@ -924,7 +924,7 @@ Bot.prototype.learn = function() {
       });
     });
   }, 4000);
-  
+
 }
 
 Bot.prototype.think = function() {
@@ -933,25 +933,25 @@ Bot.prototype.think = function() {
     console.log("[ THINKING ] " + $this.getName() + " thinks: Hm... I'm thinking...");
     var $newDesire = Math.floor((Math.random() * 5) + 1);
     switch($newDesire) {
-      case 1: 
+      case 1:
         $$world.setBotThinkTime($this);
         $this.doNothing();
         break;
-      case 2: 
+      case 2:
         $this.setThinkTime(3000);
         $this.walk();
         break;
-      case 3: 
+      case 3:
         $$world.setBotThinkTime($this);
         $this.busy = true;
         $this.talk();
         break;
-      case 4: 
+      case 4:
         $$world.setBotThinkTime($this);
         $this.busy = true;
         $this.haveBaby();
         break;
-      case 5: 
+      case 5:
         $$world.setBotThinkTime($this);
         $this.busy = true;
         $this.learn();
@@ -968,7 +968,7 @@ function say() {
   for(var i = 0; i <= $phraseSize; i++) {
     var $wordIndex = Math.floor(Math.random() * $wordsMax);
     var $word = $$wordList[$wordIndex];
-    $phrase = $phrase + " " + $word; 
+    $phrase = $phrase + " " + $word;
   }
   return $phrase;
 }
@@ -985,7 +985,7 @@ function spawnBaby($bot, $botPartner) {
         // Time to make sure that images will be requested from randomuser.me
         io.emit("baby_bot", $newBot.information);
       }, 1000);
-      
+
     }
   });
 }
@@ -1104,7 +1104,7 @@ function checkProximity() {
           else {
             // Do nothing, current bot is dead
           }
-          
+
         }
 
 
@@ -1119,7 +1119,7 @@ function timeInfo() {
   var $hour = $$world.getHour();
   var $time = $$world.getDayTime();
   var $suffix;
-  $time == "day" ? $suffix = "am" : $suffix = "pm";    
+  $time == "day" ? $suffix = "am" : $suffix = "pm";
   console.warn("[ World Info ] The time now is " + $hour + " " + $suffix);
 }
 
@@ -1134,10 +1134,10 @@ function initializeMatrix() {
   $$botHonki = new Bot("Honki", "male", "world", "world");
   $$botBob = new Bot("Bob", "male", "world", "world");
   $$botGeorge = new Bot("George", "male", "world", "world");
-  
+
   $$botAnna = new Bot("Anna", "female", "world", "world");
   $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  $$botLux = new Bot("Lux", "female", "world", "world");   
+  $$botLux = new Bot("Lux", "female", "world", "world");
 
   timeInfo();
 }
