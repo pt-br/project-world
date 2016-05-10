@@ -1133,11 +1133,15 @@ function initializeMatrix() {
   $botList = [];
   $$botHonki = new Bot("Honki", "male", "world", "world");
   $$botBob = new Bot("Bob", "male", "world", "world");
-  $$botGeorge = new Bot("George", "male", "world", "world");
+
 
   $$botAnna = new Bot("Anna", "female", "world", "world");
   $$botTiffy = new Bot("Tiffy", "female", "world", "world");
-  $$botLux = new Bot("Lux", "female", "world", "world");
+
+  setTimeout(function() {
+    $$botGeorge = new Bot("George", "male", "world", "world");
+    $$botLux = new Bot("Lux", "female", "world", "world");
+  }, 500);
 
   timeInfo();
 }
